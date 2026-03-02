@@ -1,0 +1,40 @@
+{
+  "definitions": [
+    {
+      "title": "Fragment",
+      "id": "fragment",
+      "model": "fragment",
+      "plugins": {
+        "da": {
+          "name": "fragment",
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            { "name": "reference", "selector": "div>div>p>a[href]" },
+            { "name": "referenceText", "selector": "div>div>p>a" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "fragment",
+      "fields": [
+        {
+          "component": "aem-content",
+          "name": "reference",
+          "label": "Fragment",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "referenceText",
+          "label": "Fragment Path",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

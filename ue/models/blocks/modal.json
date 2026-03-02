@@ -1,0 +1,38 @@
+{
+  "definitions": [
+    {
+      "title": "Modal",
+      "id": "modal",
+      "model": "modal",
+      "plugins": {
+        "da": {
+          "name": "modal",
+          "type": "text",
+          "unsafeHTML": "<p><a href=\"/fragments/\">Contact Us</a></p>"
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "modal",
+      "fields": [
+        {
+          "component": "aem-content",
+          "name": "fragmentPath",
+          "label": "Fragment Path",
+          "valueType": "string",
+          "description": "Path to fragment (must be under /fragments/). Append #_dnb to prevent auto-blocking."
+        },
+        {
+          "component": "text",
+          "name": "linkText",
+          "label": "Link Text",
+          "valueType": "string",
+          "description": "Visible text for the modal trigger link"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

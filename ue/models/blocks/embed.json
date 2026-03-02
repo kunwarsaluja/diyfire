@@ -1,0 +1,94 @@
+{
+  "definitions": [
+    {
+      "title": "Embed (with placeholder)",
+      "id": "embed",
+      "model": "embed",
+      "plugins": {
+        "da": {
+          "name": "embed",
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            { "name": "image", "selector": "div>div>picture>img[src]" },
+            { "name": "imageAlt", "selector": "div>div>picture>img[alt]" },
+            { "name": "embedUrl", "selector": "div>div>p>a[href]" },
+            { "name": "embedUrlText", "selector": "div>div>p>a" }
+          ]
+        }
+      }
+    },
+    {
+      "title": "Embed (no placeholder)",
+      "id": "embed-no-placeholder",
+      "model": "embed-no-placeholder",
+      "plugins": {
+        "da": {
+          "name": "embed",
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            { "name": "embedUrl", "selector": "div>div>p>a[href]" },
+            { "name": "embedUrlText", "selector": "div>div>p>a" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "embed",
+      "fields": [
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "image",
+          "label": "Placeholder Image",
+          "multi": false,
+          "description": "Optional thumbnail shown before the video plays"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "imageAlt",
+          "label": "Alt Text",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "embedUrl",
+          "label": "Embed URL",
+          "valueType": "string",
+          "required": true,
+          "description": "URL to embed (YouTube, Vimeo, Twitter, or any embed URL)"
+        },
+        {
+          "component": "text",
+          "name": "embedUrlText",
+          "label": "Embed URL Text",
+          "valueType": "string"
+        }
+      ]
+    },
+    {
+      "id": "embed-no-placeholder",
+      "fields": [
+        {
+          "component": "text",
+          "name": "embedUrl",
+          "label": "Embed URL",
+          "valueType": "string",
+          "required": true,
+          "description": "URL to embed (YouTube, Vimeo, Twitter, or any embed URL)"
+        },
+        {
+          "component": "text",
+          "name": "embedUrlText",
+          "label": "Embed URL Text",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

@@ -1,0 +1,57 @@
+{
+  "definitions": [
+    {
+      "title": "Form",
+      "id": "form",
+      "model": "form",
+      "plugins": {
+        "da": {
+          "name": "form",
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            { "name": "source", "selector": "div>div>p:nth-child(1)>a[href]" },
+            { "name": "sourceText", "selector": "div>div>p:nth-child(1)>a" },
+            { "name": "action", "selector": "div>div>p:nth-child(2)>a[href]" },
+            { "name": "actionText", "selector": "div>div>p:nth-child(2)>a" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "form",
+      "fields": [
+        {
+          "component": "text",
+          "name": "source",
+          "label": "Form Source URL",
+          "valueType": "string",
+          "required": true,
+          "description": "URL to the JSON form definition"
+        },
+        {
+          "component": "text",
+          "name": "sourceText",
+          "label": "Source Link Text",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "action",
+          "label": "Submit Endpoint",
+          "valueType": "string",
+          "description": "URL where form data is submitted"
+        },
+        {
+          "component": "text",
+          "name": "actionText",
+          "label": "Submit Link Text",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}
