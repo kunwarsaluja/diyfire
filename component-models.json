@@ -176,7 +176,8 @@
         "valueType": "string",
         "name": "image",
         "label": "Image",
-        "multi": false
+        "multi": false,
+        "description": "Optional. Block renders without image when empty."
       },
       {
         "component": "text",
@@ -185,17 +186,6 @@
         "label": "Alt Text",
         "value": ""
       },
-      {
-        "component": "richtext",
-        "name": "text",
-        "label": "Text",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "cards-item-noimage",
-    "fields": [
       {
         "component": "richtext",
         "name": "text",
@@ -224,12 +214,27 @@
     "id": "embed",
     "fields": [
       {
+        "component": "select",
+        "name": "classes",
+        "label": "Variation",
+        "options": [
+          {
+            "name": "With placeholder",
+            "value": ""
+          },
+          {
+            "name": "No placeholder",
+            "value": "no-placeholder"
+          }
+        ]
+      },
+      {
         "component": "reference",
         "valueType": "string",
         "name": "image",
         "label": "Placeholder Image",
         "multi": false,
-        "description": "Optional thumbnail shown before the video plays"
+        "description": "Optional thumbnail shown before the video plays. Leave empty when using 'No placeholder' variation."
       },
       {
         "component": "text",
@@ -238,25 +243,6 @@
         "label": "Alt Text",
         "value": ""
       },
-      {
-        "component": "text",
-        "name": "embedUrl",
-        "label": "Embed URL",
-        "valueType": "string",
-        "required": true,
-        "description": "URL to embed (YouTube, Vimeo, Twitter, or any embed URL)"
-      },
-      {
-        "component": "text",
-        "name": "embedUrlText",
-        "label": "Embed URL Text",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "embed-no-placeholder",
-    "fields": [
       {
         "component": "text",
         "name": "embedUrl",
@@ -389,11 +375,18 @@
     "id": "related-articles",
     "fields": [
       {
+        "component": "richtext",
+        "name": "links",
+        "label": "Article Links",
+        "valueType": "string",
+        "description": "A list of links to specific articles. When present, block uses links mode; otherwise uses keywords."
+      },
+      {
         "component": "text",
         "name": "keywords",
         "label": "Keywords",
         "valueType": "string",
-        "description": "Comma-separated keywords to match articles (e.g. fire, tfsa, rrsp). Use 'random' for random articles."
+        "description": "Comma-separated keywords to match articles (e.g. fire, tfsa, rrsp). Use 'random' for random articles. Used when no links are authored."
       },
       {
         "component": "text",
@@ -401,18 +394,6 @@
         "label": "Excluded Keywords",
         "valueType": "string",
         "description": "Comma-separated keywords to exclude (e.g. external)"
-      }
-    ]
-  },
-  {
-    "id": "related-articles-links",
-    "fields": [
-      {
-        "component": "richtext",
-        "name": "links",
-        "label": "Article Links",
-        "valueType": "string",
-        "description": "A list of links to specific articles"
       }
     ]
   },

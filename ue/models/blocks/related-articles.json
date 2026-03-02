@@ -1,7 +1,7 @@
 {
   "definitions": [
     {
-      "title": "Related Articles (dynamic)",
+      "title": "Related Articles",
       "id": "related-articles",
       "model": "related-articles",
       "plugins": {
@@ -10,23 +10,9 @@
           "rows": 2,
           "columns": 2,
           "fields": [
+            { "name": "links", "selector": "div:nth-child(1)>div:nth-child(1)>ul" },
             { "name": "keywords", "selector": "div:nth-child(1)>div:nth-child(2)" },
             { "name": "excluded-keywords", "selector": "div:nth-child(2)>div:nth-child(2)" }
-          ]
-        }
-      }
-    },
-    {
-      "title": "Related Articles (links)",
-      "id": "related-articles-links",
-      "model": "related-articles-links",
-      "plugins": {
-        "da": {
-          "name": "related-articles",
-          "rows": 1,
-          "columns": 1,
-          "fields": [
-            { "name": "links", "selector": "div>div>ul" }
           ]
         }
       }
@@ -37,11 +23,18 @@
       "id": "related-articles",
       "fields": [
         {
+          "component": "richtext",
+          "name": "links",
+          "label": "Article Links",
+          "valueType": "string",
+          "description": "A list of links to specific articles. When present, block uses links mode; otherwise uses keywords."
+        },
+        {
           "component": "text",
           "name": "keywords",
           "label": "Keywords",
           "valueType": "string",
-          "description": "Comma-separated keywords to match articles (e.g. fire, tfsa, rrsp). Use 'random' for random articles."
+          "description": "Comma-separated keywords to match articles (e.g. fire, tfsa, rrsp). Use 'random' for random articles. Used when no links are authored."
         },
         {
           "component": "text",
@@ -49,18 +42,6 @@
           "label": "Excluded Keywords",
           "valueType": "string",
           "description": "Comma-separated keywords to exclude (e.g. external)"
-        }
-      ]
-    },
-    {
-      "id": "related-articles-links",
-      "fields": [
-        {
-          "component": "richtext",
-          "name": "links",
-          "label": "Article Links",
-          "valueType": "string",
-          "description": "A list of links to specific articles"
         }
       ]
     }

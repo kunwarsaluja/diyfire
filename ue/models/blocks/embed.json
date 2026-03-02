@@ -1,7 +1,7 @@
 {
   "definitions": [
     {
-      "title": "Embed (with placeholder)",
+      "title": "Embed",
       "id": "embed",
       "model": "embed",
       "plugins": {
@@ -17,22 +17,6 @@
           ]
         }
       }
-    },
-    {
-      "title": "Embed (no placeholder)",
-      "id": "embed-no-placeholder",
-      "model": "embed-no-placeholder",
-      "plugins": {
-        "da": {
-          "name": "embed",
-          "rows": 1,
-          "columns": 1,
-          "fields": [
-            { "name": "embedUrl", "selector": "div>div>p>a[href]" },
-            { "name": "embedUrlText", "selector": "div>div>p>a" }
-          ]
-        }
-      }
     }
   ],
   "models": [
@@ -40,12 +24,21 @@
       "id": "embed",
       "fields": [
         {
+          "component": "select",
+          "name": "classes",
+          "label": "Variation",
+          "options": [
+            { "name": "With placeholder", "value": "" },
+            { "name": "No placeholder", "value": "no-placeholder" }
+          ]
+        },
+        {
           "component": "reference",
           "valueType": "string",
           "name": "image",
           "label": "Placeholder Image",
           "multi": false,
-          "description": "Optional thumbnail shown before the video plays"
+          "description": "Optional thumbnail shown before the video plays. Leave empty when using 'No placeholder' variation."
         },
         {
           "component": "text",
@@ -54,25 +47,6 @@
           "label": "Alt Text",
           "value": ""
         },
-        {
-          "component": "text",
-          "name": "embedUrl",
-          "label": "Embed URL",
-          "valueType": "string",
-          "required": true,
-          "description": "URL to embed (YouTube, Vimeo, Twitter, or any embed URL)"
-        },
-        {
-          "component": "text",
-          "name": "embedUrlText",
-          "label": "Embed URL Text",
-          "valueType": "string"
-        }
-      ]
-    },
-    {
-      "id": "embed-no-placeholder",
-      "fields": [
         {
           "component": "text",
           "name": "embedUrl",

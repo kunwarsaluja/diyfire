@@ -10,10 +10,8 @@
     "components": [
       "cards",
       "cards-item",
-      "cards-item-noimage",
       "columns",
       "embed",
-      "embed-no-placeholder",
       "form",
       "fragment",
       "hero",
@@ -21,7 +19,6 @@
       "journey-map",
       "modal",
       "related-articles",
-      "related-articles-links",
       "search",
       "social-share",
       "tabs",
@@ -32,8 +29,7 @@
   {
     "id": "cards",
     "components": [
-      "cards-item",
-      "cards-item-noimage"
+      "cards-item"
     ]
   },
   {

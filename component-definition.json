@@ -99,24 +99,6 @@
           }
         },
         {
-          "title": "Card Item (no image)",
-          "id": "cards-item-noimage",
-          "model": "cards-item-noimage",
-          "plugins": {
-            "da": {
-              "name": "cards-item-noimage",
-              "rows": 1,
-              "columns": 1,
-              "fields": [
-                {
-                  "name": "text",
-                  "selector": "div:nth-child(1)"
-                }
-              ]
-            }
-          }
-        },
-        {
           "title": "Columns",
           "id": "columns",
           "model": "columns",
@@ -155,7 +137,7 @@
           }
         },
         {
-          "title": "Embed (with placeholder)",
+          "title": "Embed",
           "id": "embed",
           "model": "embed",
           "plugins": {
@@ -172,28 +154,6 @@
                   "name": "imageAlt",
                   "selector": "div>div>picture>img[alt]"
                 },
-                {
-                  "name": "embedUrl",
-                  "selector": "div>div>p>a[href]"
-                },
-                {
-                  "name": "embedUrlText",
-                  "selector": "div>div>p>a"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "title": "Embed (no placeholder)",
-          "id": "embed-no-placeholder",
-          "model": "embed-no-placeholder",
-          "plugins": {
-            "da": {
-              "name": "embed",
-              "rows": 1,
-              "columns": 1,
-              "fields": [
                 {
                   "name": "embedUrl",
                   "selector": "div>div>p>a[href]"
@@ -332,7 +292,7 @@
           }
         },
         {
-          "title": "Related Articles (dynamic)",
+          "title": "Related Articles",
           "id": "related-articles",
           "model": "related-articles",
           "plugins": {
@@ -342,30 +302,16 @@
               "columns": 2,
               "fields": [
                 {
+                  "name": "links",
+                  "selector": "div:nth-child(1)>div:nth-child(1)>ul"
+                },
+                {
                   "name": "keywords",
                   "selector": "div:nth-child(1)>div:nth-child(2)"
                 },
                 {
                   "name": "excluded-keywords",
                   "selector": "div:nth-child(2)>div:nth-child(2)"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "title": "Related Articles (links)",
-          "id": "related-articles-links",
-          "model": "related-articles-links",
-          "plugins": {
-            "da": {
-              "name": "related-articles",
-              "rows": 1,
-              "columns": 1,
-              "fields": [
-                {
-                  "name": "links",
-                  "selector": "div>div>ul"
                 }
               ]
             }

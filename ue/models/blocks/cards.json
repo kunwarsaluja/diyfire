@@ -29,21 +29,6 @@
           ]
         }
       }
-    },
-    {
-      "title": "Card Item (no image)",
-      "id": "cards-item-noimage",
-      "model": "cards-item-noimage",
-      "plugins": {
-        "da": {
-          "name": "cards-item-noimage",
-          "rows": 1,
-          "columns": 1,
-          "fields": [
-            { "name": "text", "selector": "div:nth-child(1)" }
-          ]
-        }
-      }
     }
   ],
   "models": [
@@ -69,7 +54,8 @@
           "valueType": "string",
           "name": "image",
           "label": "Image",
-          "multi": false
+          "multi": false,
+          "description": "Optional. Block renders without image when empty."
         },
         {
           "component": "text",
@@ -85,23 +71,12 @@
           "valueType": "string"
         }
       ]
-    },
-    {
-      "id": "cards-item-noimage",
-      "fields": [
-        {
-          "component": "richtext",
-          "name": "text",
-          "label": "Text",
-          "valueType": "string"
-        }
-      ]
     }
   ],
   "filters": [
     {
       "id": "cards",
-      "components": ["cards-item", "cards-item-noimage"]
+      "components": ["cards-item"]
     }
   ]
 }
