@@ -266,18 +266,6 @@
           }
         },
         {
-          "title": "Modal",
-          "id": "modal",
-          "model": "modal",
-          "plugins": {
-            "da": {
-              "name": "modal",
-              "type": "text",
-              "unsafeHTML": "<p><a href=\"/fragments/\">Contact Us</a></p>"
-            }
-          }
-        },
-        {
           "title": "Related Articles",
           "id": "related-articles",
           "model": "related-articles",
