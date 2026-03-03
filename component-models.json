@@ -339,64 +339,22 @@
     "id": "related-articles",
     "fields": [
       {
-        "component": "select",
-        "name": "classes",
-        "label": "Variation",
-        "valueType": "string",
-        "value": "",
-        "options": [
-          {
-            "name": "Links",
-            "value": "links"
-          },
-          {
-            "name": "Dynamic",
-            "value": "dynamic"
-          }
-        ],
-        "description": "Links: specify article URLs. Dynamic: match articles by keywords."
-      },
-      {
         "component": "richtext",
         "name": "links",
         "label": "Article Links",
-        "description": "A list of links to specific articles.",
-        "condition": {
-          "===": [
-            {
-              "var": "classes"
-            },
-            "links"
-          ]
-        }
+        "description": "A list of links to specific articles."
       },
       {
         "component": "text",
         "name": "keywords",
         "label": "Keywords",
-        "description": "Comma-separated keywords to match articles (e.g. fire, tfsa, rrsp). Use 'random' for random articles.",
-        "condition": {
-          "===": [
-            {
-              "var": "classes"
-            },
-            "dynamic"
-          ]
-        }
+        "description": "Comma-separated keywords to match articles (e.g. fire, tfsa, rrsp). Use 'random' for random articles."
       },
       {
         "component": "text",
         "name": "excluded-keywords",
         "label": "Excluded Keywords",
-        "description": "Comma-separated keywords to exclude (e.g. external)",
-        "condition": {
-          "===": [
-            {
-              "var": "classes"
-            },
-            "dynamic"
-          ]
-        }
+        "description": "Comma-separated keywords to exclude (e.g. external)"
       }
     ]
   },
