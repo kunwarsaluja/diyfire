@@ -279,8 +279,10 @@
       {
         "component": "richtext",
         "name": "reference",
-        "label": "Fragment",
-        "valueType": "string"
+        "label": "Fragment Path",
+        "valueType": "string",
+        "required": true,
+        "description": "Path to the fragment"
       }
     ]
   },
