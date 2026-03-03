@@ -277,15 +277,9 @@
     "id": "fragment",
     "fields": [
       {
-        "component": "aem-content",
+        "component": "richtext",
         "name": "reference",
         "label": "Fragment",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "referenceText",
-        "label": "Fragment Path",
         "valueType": "string"
       }
     ]

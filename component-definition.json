@@ -196,11 +196,7 @@
               "fields": [
                 {
                   "name": "reference",
-                  "selector": "div>div>p>a[href]"
-                },
-                {
-                  "name": "referenceText",
-                  "selector": "div>div>p>a"
+                  "selector": "div>div>p"
                 }
               ]
             }
