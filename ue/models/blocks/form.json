@@ -11,7 +11,7 @@
           "columns": 1,
           "fields": [
             { "name": "source", "selector": "div>div>p:nth-child(1)" },
-            { "name": "action", "selector": "div>div>p:nth-child(2)" }
+            { "name": "actionUrl", "selector": "div>div>p:nth-child(2)" }
           ]
         }
       }
@@ -31,7 +31,7 @@
         },
         {
           "component": "richtext",
-          "name": "action",
+          "name": "actionUrl",
           "label": "Submit Endpoint",
           "valueType": "string",
           "description": "URL where form data is submitted"

@@ -177,7 +177,7 @@
                   "selector": "div>div>p:nth-child(1)"
                 },
                 {
-                  "name": "action",
+                  "name": "actionUrl",
                   "selector": "div>div>p:nth-child(2)"
                 }
               ]

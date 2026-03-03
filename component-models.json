@@ -266,7 +266,7 @@
       },
       {
         "component": "richtext",
-        "name": "action",
+        "name": "actionUrl",
         "label": "Submit Endpoint",
         "valueType": "string",
         "description": "URL where form data is submitted"
