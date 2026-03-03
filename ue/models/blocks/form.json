@@ -10,8 +10,8 @@
           "rows": 1,
           "columns": 1,
           "fields": [
-            { "name": "source", "selector": "div>div>p:nth-child(1)" },
-            { "name": "actionUrl", "selector": "div>div>p:nth-child(2)" }
+            { "name": "source", "selector": "div>div:nth-child(1)>p" },
+            { "name": "actionUrl", "selector": "div>div:nth-child(2)>p" }
           ]
         }
       }
