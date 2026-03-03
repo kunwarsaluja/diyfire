@@ -12,8 +12,7 @@
           "fields": [
             { "name": "image", "selector": "div>div>picture>img[src]" },
             { "name": "imageAlt", "selector": "div>div>picture>img[alt]" },
-            { "name": "embedUrl", "selector": "div>div>p>a[href]" },
-            { "name": "embedUrlText", "selector": "div>div>p>a" }
+            { "name": "embedUrl", "selector": "div>div>p>a[href]" }
           ]
         }
       }
@@ -54,12 +53,6 @@
           "valueType": "string",
           "required": true,
           "description": "URL to embed (YouTube, Vimeo, Twitter, or any embed URL)"
-        },
-        {
-          "component": "text",
-          "name": "embedUrlText",
-          "label": "Embed URL Text",
-          "valueType": "string"
         }
       ]
     }

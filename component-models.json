@@ -250,12 +250,6 @@
         "valueType": "string",
         "required": true,
         "description": "URL to embed (YouTube, Vimeo, Twitter, or any embed URL)"
-      },
-      {
-        "component": "text",
-        "name": "embedUrlText",
-        "label": "Embed URL Text",
-        "valueType": "string"
       }
     ]
   },

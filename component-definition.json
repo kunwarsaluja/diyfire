@@ -157,10 +157,6 @@
                 {
                   "name": "embedUrl",
                   "selector": "div>div>p>a[href]"
-                },
-                {
-                  "name": "embedUrlText",
-                  "selector": "div>div>p>a"
                 }
               ]
             }

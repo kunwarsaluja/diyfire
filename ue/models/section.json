@@ -58,7 +58,6 @@
       "id": "section",
       "components": [
         "cards",
-        "cards-item",
         "columns",
         "embed",
         "form",
