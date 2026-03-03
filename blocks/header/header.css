@@ -1,19 +1,19 @@
 /* header – mobile first, 600/900/1200px breakpoints */
 /* stylelint-disable no-descending-specificity -- header cascade order is intentional across breakpoints */
 header {
-  --header-hover-bg: light-dark(rgb(0 0 0 / 6%), rgb(255 255 255 / 8%));
-  --header-link-hover-bg: light-dark(rgb(0 0 0 / 4%), rgb(255 255 255 / 6%));
-  --header-drop-shadow: 0 8px 24px rgb(0 0 0 / 10%), 0 2px 8px rgb(0 0 0 / 4%);
-  --header-drop-border: light-dark(var(--color-gray-200), var(--color-gray-600));
+  --header-hover-bg: transparent;
+  --header-link-hover-bg: transparent;
+  --header-drop-shadow: none;
+  --header-drop-border: transparent;
 
   /* typography: brand (strongest) > primary nav > dropdown headings > dropdown items */
-  --nav-brand-size: var(--heading-font-size-s);   /* ~20px */
+  --nav-brand-size: 1.7rem;
   --nav-brand-weight: 700;
-  --nav-primary-size: var(--body-font-size-m);    /* 16px mobile, 18px desktop */
-  --nav-primary-weight: 500;
-  --nav-heading-size: var(--body-font-size-s);    /* 14px – labels like BEGINNERS */
+  --nav-primary-size: 0.8rem;
+  --nav-primary-weight: 700;
+  --nav-heading-size: var(--body-font-size-s);
   --nav-heading-weight: 700;
-  --nav-item-size: var(--body-font-size-s);      /* 14px mobile, 16px desktop mega */
+  --nav-item-size: var(--body-font-size-s);
   --nav-item-weight: 400;
 
   /* spacing: use space tokens */
@@ -34,9 +34,9 @@ header {
   --nav-bg-mega: var(--color-shaded);
   --nav-bg-hover-item: var(--light-color);
 
-  /* header uses neutral hover color, not link blue */
-  --nav-hover-color: light-dark(var(--color-gray-800), var(--color-gray-200));
-  --nav-focus-color: light-dark(var(--color-gray-700), var(--color-gray-300));
+  /* header uses neutral hover color */
+  --nav-hover-color: light-dark(var(--color-rust), var(--color-gold));
+  --nav-focus-color: light-dark(var(--color-rust), var(--color-gold));
 
   /* desktop-only (overridden in @media 900px) */
   --nav-desktop-max-width: 1264px;
@@ -50,16 +50,15 @@ header {
 }
 
 header .nav-wrapper {
-  background-color: var(--nav-bg);
+  background-color: #faf8f5;
   width: 100%;
   z-index: 1000;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
-  box-shadow: 0 1px 3px rgb(0 0 0 / 4%);
-  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: var(--border-heritage);
+  box-shadow: none;
 }
 
 /* mobile: base layout */
@@ -180,9 +179,12 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
 /* brand */
 header .nav-brand {
   grid-area: brand;
+  font-family: var(--font-family-serif);
   font-size: var(--nav-brand-size);
   font-weight: var(--nav-brand-weight);
   line-height: 1;
+  letter-spacing: -0.5px;
+  color: var(--color-rust);
 }
 
 header nav .nav-brand a:any-link {
@@ -222,6 +224,8 @@ header nav .nav-sections ul {
   padding: 0;
   margin: 0;
   font-size: var(--nav-primary-size);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
 @media (width <= 899px) {
@@ -476,6 +480,39 @@ header nav .nav-sections button.button {
   padding: 0;
   min-width: 0;
   font-weight: var(--nav-primary-weight);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+header nav .nav-sections a.button:any-link:hover,
+header nav .nav-sections a.button:any-link:focus-visible,
+header nav .nav-sections button.button:hover,
+header nav .nav-sections button.button:focus-visible {
+  background: transparent;
+  border: 0;
+  transform: none;
+  box-shadow: none;
+}
+
+/* CTA button in header tools */
+header nav .nav-tools a.button:any-link:not(.nav-tool) {
+  border: 1.5px solid var(--color-rust);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-rust);
+  padding: 12px 24px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: all 0.3s;
+}
+
+header nav .nav-tools a.button:any-link:not(.nav-tool):hover {
+  background: var(--color-rust);
+  color: var(--color-light);
+  transform: none;
+  box-shadow: none;
 }
 
 header nav .nav-sections .default-content-wrapper > ul > li > ul p.button-container {
@@ -721,6 +758,7 @@ header nav .nav-tools .nav-language-menu a:focus-visible {
     flex: 0 1 auto;
     display: inline-flex;
     align-items: center;
+    border-bottom: 0;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > p {
@@ -875,8 +913,8 @@ header nav .nav-tools .nav-language-menu a:focus-visible {
     right: 0;
     top: var(--mega-top, var(--nav-height, 64px));
     padding: var(--space-xl) var(--space-xl);
-    border-top: 1px solid var(--header-drop-border);
-    background-color: var(--nav-bg-mega);
+    border-bottom: var(--border-heritage);
+    background-color: #faf8f5;
     color: var(--text-color);
     box-shadow: var(--header-drop-shadow);
     z-index: 999;
@@ -1029,7 +1067,7 @@ header nav .nav-tools .nav-language-menu a:focus-visible {
   header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > .nav-mega-inner > li.nav-mega-promo a:hover,
   header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > .nav-mega-inner > li.nav-mega-promo a:focus-visible {
     background-color: var(--nav-bg-hover-item);
-    box-shadow: 0 6px 20px rgb(0 0 0 / 12%);
+    box-shadow: none;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > .nav-mega-inner > li.nav-mega-heading > ul a:hover,

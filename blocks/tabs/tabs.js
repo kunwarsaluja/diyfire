@@ -51,26 +51,6 @@ function updateTabState(tabDefs, selectedId, tabButtons, tabPanels) {
   });
 }
 
-function getSectionBackgroundUrl(section) {
-  const url = section?.dataset?.background || section?.dataset?.backgroundImage || '';
-  if (!url || typeof url !== 'string') return '';
-  try {
-    return new URL(url, window.location.href).href;
-  } catch {
-    return '';
-  }
-}
-
-function applyTabsBackground(tabsContainer, tabDef) {
-  const url = getSectionBackgroundUrl(tabDef?.section);
-  tabsContainer.classList.toggle('has-background', Boolean(url));
-  if (url) {
-    tabsContainer.style.backgroundImage = `url("${url.replace(/"/g, '%22')}")`;
-  } else {
-    tabsContainer.style.removeProperty('background-image');
-  }
-}
-
 function buildTabsUI(tabDefs, tabsContainer, sectionId = '') {
   const hash = window.location.hash.replace('#', '').toLowerCase();
   const selectedId = tabDefs.find((tabDef) => tabDef.id === hash)?.id || tabDefs[0]?.id;
@@ -115,7 +95,6 @@ function buildTabsUI(tabDefs, tabsContainer, sectionId = '') {
 
     button.addEventListener('click', () => {
       updateTabState(tabDefs, tabDef.id, tabButtons, tabPanels);
-      applyTabsBackground(tabsContainer, tabDef);
       window.history.pushState({}, '', `${window.location.pathname}#${tabDef.id}`);
     });
 
@@ -124,9 +103,6 @@ function buildTabsUI(tabDefs, tabsContainer, sectionId = '') {
     tabList.append(button);
     tabContent.append(panel);
   });
-
-  const selectedTab = tabDefs.find((tabDef) => tabDef.id === selectedId) || tabDefs[0];
-  applyTabsBackground(tabsContainer, selectedTab);
 
   tabsWrapper.append(tabList, tabContent);
   return tabsWrapper;

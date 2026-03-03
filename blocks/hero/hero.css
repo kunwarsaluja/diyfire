@@ -1,3 +1,5 @@
+/* Hero block – Heritage Elite, mobile-first */
+
 .hero-container .hero-wrapper {
   max-width: unset;
   padding: 0;
@@ -5,71 +7,83 @@
 
 .hero {
   position: relative;
+  background-color: var(--color-parchment);
+}
+
+/* Image */
+.hero > div:first-child {
+  line-height: 0;
+}
+
+.hero picture img {
+  display: block;
+  max-height: 520px;
+  object-fit: cover;
+  opacity: 0.5;
+  margin-inline: auto;
+}
+
+/* Text overlay */
+.hero > div:last-child {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 40px var(--content-padding-inline);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-l);
-  min-height: 280px;
-  padding: var(--space-xl) var(--content-padding-inline);
-}
-
-.hero h1,
-.hero h2,
-.hero h3,
-.hero h4,
-.hero h5,
-.hero h6,
-.hero p,
-.hero .article-author-container,
-.hero a {
-  position: relative;
-  z-index: 1;
-  color: rgb(255 255 255);
-}
-
-.hero h1 {
-  max-width: var(--grid-container-width);
-  margin: 0 auto;
-  font-size: 2.25rem;
-  font-weight: 800;
-  line-height: 1.2;
-  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
 }
 
 .hero > div:last-child > div {
   display: flex;
   flex-direction: column;
-  gap: var(--space-l);
+  align-items: flex-start;
+  gap: var(--space-m);
+  max-width: 600px;
 }
 
-.hero p {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-s);
-  max-width: var(--grid-container-width);
-  margin: 0 auto;
-  font-size: 24px;
+/* Tagline */
+.hero .hero-tagline {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  margin: 0;
+}
+
+/* Heading */
+.hero h1 {
+  margin: 0;
+  font-family: var(--font-family-serif);
+  font-size: clamp(2rem, 8vw, 4.5rem);
   font-weight: 500;
-  line-height: 1.2;
-  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+  line-height: 1.05;
+  color: var(--color-ink);
 }
 
-.hero picture {
-  position: absolute;
-  z-index: -2;
-  inset: 0;
-  box-sizing: border-box;
+.hero h1 em {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--color-rust);
 }
 
-.hero picture img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  filter: blur(2px);
+/* Body text — hidden on mobile */
+.hero p:not(.button-container, .hero-tagline) {
+  display: none;
+  max-width: 550px;
+  margin: 0;
+  font-family: var(--font-family-serif);
+  font-size: 1.1rem;
+  color: var(--color-ink);
+  line-height: 1.7;
 }
 
+.hero p.button-container {
+  margin-top: var(--space-s);
+}
+
+/* Icon */
 .hero .icon {
   flex-shrink: 0;
   width: 165px;
@@ -82,31 +96,102 @@
   object-fit: contain;
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: rgb(0 0 0 / 45%);
-  pointer-events: none;
+/* Tablet: show body text */
+@media (width >= 600px) {
+  .hero p:not(.button-container, .hero-tagline) {
+    display: block;
+    font-size: 1.3rem;
+  }
 }
 
-@media (width >= 600px) {
-  .hero {
-    min-height: 320px;
+/* Desktop */
+@media (width >= 900px) {
+  .hero > div:last-child {
+    padding: 80px 5vw;
+  }
+
+  .hero > div:last-child > div {
+    max-width: 1000px;
+    margin: 0 25%;
   }
 
   .hero h1 {
-    font-size: 3rem;
+    font-size: clamp(3rem, 4vw, 5rem);
   }
+}
+
+@media (width >= 1200px) {
+  .hero > div:last-child {
+    padding: 80px 6vw;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.5rem, 4.5vw, 5.5rem);
+  }
+}
+
+/* No-image fallback */
+.hero.no-image > div:last-child {
+  position: static;
+  padding: 80px var(--content-padding-inline);
+}
+
+.hero.no-image > div:last-child > div {
+  align-items: center;
+  text-align: center;
+  max-width: var(--grid-container-width);
+  margin: 0 auto;
+}
+
+.hero.no-image p:not(.button-container, .hero-tagline) {
+  display: block;
 }
 
 @media (width >= 900px) {
-  .hero {
+  .hero.no-image > div:last-child {
     min-height: 400px;
+    padding: 100px 5vw;
   }
+}
 
-  .hero h1 {
-    font-size: 3.5rem;
+@media (width >= 1200px) {
+  .hero.no-image > div:last-child {
+    padding: 120px 6vw;
   }
+}
+
+/* Background color variants */
+.hero.rust {
+  background-color: var(--color-rust);
+}
+
+.hero.rust h1,
+.hero.rust p:not(.button-container, .hero-tagline) {
+  color: var(--color-parchment);
+}
+
+.hero.rust h1 em {
+  color: var(--color-gold);
+}
+
+.hero.gold {
+  background-color: var(--color-gold);
+}
+
+.hero.gold h1,
+.hero.gold p:not(.button-container, .hero-tagline) {
+  color: var(--color-ink);
+}
+
+.hero.ink {
+  background-color: var(--color-ink);
+}
+
+.hero.ink h1,
+.hero.ink p:not(.button-container, .hero-tagline) {
+  color: var(--color-parchment);
+}
+
+.hero.ink h1 em {
+  color: var(--color-rust);
 }

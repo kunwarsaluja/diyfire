@@ -45,12 +45,18 @@ function matchArticles(rows, keywordsConfig, excludedConfig, limit) {
     .slice(0, limit);
 }
 
-function buildCard(article) {
+function buildCard(article, index) {
   const href = normalizePath(article.path);
   const link = createTag('a', { href, class: 'related-articles-card-link' });
-  link.append(createTag('div', { class: 'related-articles-card-strip' }));
 
   const content = createTag('div', { class: 'related-articles-card-content' });
+
+  // Keyword tag
+  const keywords = parseKeywords(getArticleKeywords(article));
+  if (keywords.length > 0) {
+    content.append(createTag('span', { class: 'related-articles-card-tag' }, keywords[0]));
+  }
+
   content.append(createTag('h3', {}, article.title || href));
   if (article.description) {
     content.append(createTag('p', { class: 'related-articles-card-description' }, article.description));
@@ -61,74 +67,26 @@ function buildCard(article) {
   }
 
   link.append(content);
-  return createTag('li', { class: 'related-articles-card' }, link);
-}
 
-function getScrollStep(list) {
-  const firstCard = list.querySelector('.related-articles-card');
-  if (!firstCard) return 0;
-  const styles = window.getComputedStyle(list);
-  const gap = parseFloat(styles.columnGap || styles.gap || '0');
-  return firstCard.getBoundingClientRect().width + gap;
-}
-
-function updateSliderButtons(list, prevBtn, nextBtn) {
-  const max = Math.max(0, list.scrollWidth - list.clientWidth - 1);
-  const atStart = list.scrollLeft <= 0;
-  const atEnd = list.scrollLeft >= max;
-
-  prevBtn.disabled = atStart;
-  prevBtn.classList.toggle('is-hidden', atStart);
-  nextBtn.disabled = atEnd;
-}
-
-function buildSliderControls(list) {
-  const controls = createTag('div', { class: 'related-articles-controls', 'aria-label': 'Related articles slider controls' });
-  const prevBtn = createTag('button', {
-    type: 'button',
-    class: 'related-articles-arrow related-articles-arrow-prev',
-    'aria-label': 'Scroll related articles left',
-  }, '←');
-  const nextBtn = createTag('button', {
-    type: 'button',
-    class: 'related-articles-arrow related-articles-arrow-next',
-    'aria-label': 'Scroll related articles right',
-  }, '→');
-
-  prevBtn.addEventListener('click', () => {
-    list.scrollBy({ left: -getScrollStep(list), behavior: 'smooth' });
-    window.setTimeout(() => updateSliderButtons(list, prevBtn, nextBtn), 180);
-  });
-  nextBtn.addEventListener('click', () => {
-    list.scrollBy({ left: getScrollStep(list), behavior: 'smooth' });
-    window.setTimeout(() => updateSliderButtons(list, prevBtn, nextBtn), 180);
-  });
-
-  list.addEventListener('scroll', () => updateSliderButtons(list, prevBtn, nextBtn), { passive: true });
-  window.addEventListener('resize', () => updateSliderButtons(list, prevBtn, nextBtn), { passive: true });
-  updateSliderButtons(list, prevBtn, nextBtn);
-
-  controls.append(prevBtn, nextBtn);
-  return controls;
+  const classes = ['related-articles-card'];
+  if (index === 0) classes.push('related-articles-card-featured');
+  return createTag('li', { class: classes.join(' ') }, link);
 }
 
 function renderRelatedList(block, articles, emptyMessage) {
   block.textContent = '';
 
-  const slider = createTag('div', { class: 'related-articles-slider' });
   const list = createTag('ul', {
     class: 'related-articles-list',
     role: 'list',
   });
-  slider.append(list);
-  block.append(slider);
+  block.append(list);
 
   if (!articles.length) {
     block.append(createTag('p', { class: 'related-articles-empty' }, emptyMessage));
     return;
   }
-  articles.forEach((article) => list.append(buildCard(article)));
-  if (articles.length > 1) slider.append(buildSliderControls(list));
+  articles.forEach((article, idx) => list.append(buildCard(article, idx)));
 }
 
 export default async function init(block) {
@@ -142,7 +100,12 @@ export default async function init(block) {
     } catch {
       indexRows = [];
     }
-    const articles = resolveArticlesFromIndex(authoredLinks, indexRows);
+    const articles = resolveArticlesFromIndex(authoredLinks, indexRows).map((article) => {
+      const row = indexRows.find(
+        (r) => r?.path && normalizePath(r.path) === normalizePath(article.path),
+      );
+      return { ...article, keywords: row?.keywords || '' };
+    });
     renderRelatedList(block, articles, 'No related articles.');
     return;
   }
@@ -150,14 +113,12 @@ export default async function init(block) {
   const keywords = String(config.keywords || 'random').trim();
   const excluded = String(config['excluded-keywords'] || '').trim();
 
-  const slider = createTag('div', { class: 'related-articles-slider' });
   const list = createTag('ul', {
     class: 'related-articles-list',
     role: 'list',
   });
   block.textContent = '';
-  slider.append(list);
-  block.append(slider);
+  block.append(list);
 
   try {
     const allArticles = await fetchQueryIndexAll();
@@ -166,8 +127,7 @@ export default async function init(block) {
       block.append(createTag('p', { class: 'related-articles-empty' }, 'No related articles found.'));
       return;
     }
-    matches.forEach((article) => list.append(buildCard(article)));
-    if (matches.length > 1) slider.append(buildSliderControls(list));
+    matches.forEach((article, idx) => list.append(buildCard(article, idx)));
   } catch {
     block.append(createTag('p', { class: 'related-articles-empty' }, 'Unable to load related articles right now.'));
   }
