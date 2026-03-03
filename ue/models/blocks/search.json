@@ -7,8 +7,7 @@
       "plugins": {
         "da": {
           "name": "search",
-          "rows": 7,
-          "columns": 2
+          "type": "key-value-block"
         }
       }
     }
