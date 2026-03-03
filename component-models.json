@@ -257,7 +257,7 @@
     "id": "form",
     "fields": [
       {
-        "component": "text",
+        "component": "richtext",
         "name": "source",
         "label": "Form Source URL",
         "valueType": "string",
@@ -265,23 +265,11 @@
         "description": "URL to the JSON form definition"
       },
       {
-        "component": "text",
-        "name": "sourceText",
-        "label": "Source Link Text",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
+        "component": "richtext",
         "name": "action",
         "label": "Submit Endpoint",
         "valueType": "string",
         "description": "URL where form data is submitted"
-      },
-      {
-        "component": "text",
-        "name": "actionText",
-        "label": "Submit Link Text",
-        "valueType": "string"
       }
     ]
   },
