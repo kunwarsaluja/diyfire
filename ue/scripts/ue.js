@@ -1,7 +1,7 @@
 import { moveInstrumentation } from './ue-utils.js';
 
 const setupObservers = () => {
-  const mutatingBlocks = document.querySelectorAll('div.cards, div.journey-map');
+  const mutatingBlocks = document.querySelectorAll('div.cards, div.journey-map, div.form');
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       if (mutation.type === 'childList' && mutation.target.tagName === 'DIV') {
@@ -70,24 +70,6 @@ const setupUEEventHandlers = () => {
     const picture = element.tagName === 'IMG' ? element.closest('picture') : element;
     picture?.querySelectorAll('source').forEach((source) => source.remove());
     picture?.querySelector('img')?.removeAttribute('srcset');
-  });
-
-  // When embedUrl is updated, copy to embedUrlText if empty so the URL is retained
-  document.body.addEventListener('aue:content-patch', ({ detail: { patch, request } }) => {
-    if (patch.name !== 'embedUrl') return;
-
-    const element = document.querySelector(`[data-aue-resource="${request.target.resource}"]`);
-    if (!element) return;
-
-    const anchor = element.getAttribute('data-aue-prop') === 'embedUrl'
-      ? element
-      : element.querySelector('[data-aue-prop="embedUrl"]') || element.querySelector('a[href]');
-    if (!anchor || anchor.tagName !== 'A') return;
-
-    const url = patch.value || anchor.getAttribute('href') || '';
-    if (url && (!anchor.textContent || !anchor.textContent.trim())) {
-      anchor.textContent = url;
-    }
   });
 
   document.body.addEventListener('aue:ui-select', (event) => {
