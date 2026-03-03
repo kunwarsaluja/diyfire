@@ -20,8 +20,8 @@
       "plugins": {
         "da": {
           "name": "journey-map-step",
-          "rows": 1,
-          "columns": 2,
+          "rows": 2,
+          "columns": 0,
           "fields": [
             { "name": "title", "selector": "div:nth-child(1)" },
             { "name": "content", "selector": "div:nth-child(2)" }
