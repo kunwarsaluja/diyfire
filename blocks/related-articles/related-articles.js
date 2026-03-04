@@ -45,13 +45,103 @@ function matchArticles(rows, keywordsConfig, excludedConfig, limit) {
     .slice(0, limit);
 }
 
-function buildCard(article, index) {
+/* -----------------------------------------------------------------------
+   Default slider variant
+   ----------------------------------------------------------------------- */
+
+function buildSliderCard(article) {
+  const href = normalizePath(article.path);
+  const link = createTag('a', { href, class: 'related-articles-card-link' });
+  link.append(createTag('div', { class: 'related-articles-card-strip' }));
+
+  const content = createTag('div', { class: 'related-articles-card-content' });
+  content.append(createTag('h3', {}, article.title || href));
+  if (article.description) {
+    content.append(createTag('p', { class: 'related-articles-card-description' }, article.description));
+  }
+  const date = article.date || article.publisheddate || article.lastModified;
+  if (date) {
+    content.append(createTag('p', { class: 'related-articles-card-date' }, formatDate(date)));
+  }
+
+  link.append(content);
+  return createTag('li', { class: 'related-articles-card' }, link);
+}
+
+function getScrollStep(list) {
+  const firstCard = list.querySelector('.related-articles-card');
+  if (!firstCard) return 0;
+  const styles = window.getComputedStyle(list);
+  const gap = parseFloat(styles.columnGap || styles.gap || '0');
+  return firstCard.getBoundingClientRect().width + gap;
+}
+
+function updateSliderButtons(list, prevBtn, nextBtn) {
+  const max = Math.max(0, list.scrollWidth - list.clientWidth - 1);
+  const atStart = list.scrollLeft <= 0;
+  const atEnd = list.scrollLeft >= max;
+
+  prevBtn.disabled = atStart;
+  prevBtn.classList.toggle('is-hidden', atStart);
+  nextBtn.disabled = atEnd;
+}
+
+function buildSliderControls(list) {
+  const controls = createTag('div', { class: 'related-articles-controls', 'aria-label': 'Related articles slider controls' });
+  const prevBtn = createTag('button', {
+    type: 'button',
+    class: 'related-articles-arrow related-articles-arrow-prev',
+    'aria-label': 'Scroll related articles left',
+  }, '\u2190');
+  const nextBtn = createTag('button', {
+    type: 'button',
+    class: 'related-articles-arrow related-articles-arrow-next',
+    'aria-label': 'Scroll related articles right',
+  }, '\u2192');
+
+  prevBtn.addEventListener('click', () => {
+    list.scrollBy({ left: -getScrollStep(list), behavior: 'smooth' });
+    window.setTimeout(() => updateSliderButtons(list, prevBtn, nextBtn), 180);
+  });
+  nextBtn.addEventListener('click', () => {
+    list.scrollBy({ left: getScrollStep(list), behavior: 'smooth' });
+    window.setTimeout(() => updateSliderButtons(list, prevBtn, nextBtn), 180);
+  });
+
+  list.addEventListener('scroll', () => updateSliderButtons(list, prevBtn, nextBtn), { passive: true });
+  window.addEventListener('resize', () => updateSliderButtons(list, prevBtn, nextBtn), { passive: true });
+  updateSliderButtons(list, prevBtn, nextBtn);
+
+  controls.append(prevBtn, nextBtn);
+  return controls;
+}
+
+function renderSlider(block, articles, emptyMessage) {
+  block.textContent = '';
+
+  const slider = createTag('div', { class: 'related-articles-slider' });
+  const list = createTag('ul', { class: 'related-articles-list', role: 'list' });
+  slider.append(list);
+  block.append(slider);
+
+  if (!articles.length) {
+    block.append(createTag('p', { class: 'related-articles-empty' }, emptyMessage));
+    return;
+  }
+  articles.forEach((article) => list.append(buildSliderCard(article)));
+  if (articles.length > 1) slider.append(buildSliderControls(list));
+}
+
+/* -----------------------------------------------------------------------
+   Bento grid variant
+   ----------------------------------------------------------------------- */
+
+function buildBentoCard(article, index) {
   const href = normalizePath(article.path);
   const link = createTag('a', { href, class: 'related-articles-card-link' });
 
   const content = createTag('div', { class: 'related-articles-card-content' });
 
-  // Keyword tag
   const keywords = parseKeywords(getArticleKeywords(article));
   if (keywords.length > 0) {
     content.append(createTag('span', { class: 'related-articles-card-tag' }, keywords[0]));
@@ -73,25 +163,24 @@ function buildCard(article, index) {
   return createTag('li', { class: classes.join(' ') }, link);
 }
 
-function renderRelatedList(block, articles, emptyMessage) {
+function renderBentoGrid(block, articles, emptyMessage) {
   block.textContent = '';
 
-  const list = createTag('ul', {
-    class: 'related-articles-list',
-    role: 'list',
-  });
+  const list = createTag('ul', { class: 'related-articles-list', role: 'list' });
   block.append(list);
 
   if (!articles.length) {
     block.append(createTag('p', { class: 'related-articles-empty' }, emptyMessage));
     return;
   }
-  articles.forEach((article, idx) => list.append(buildCard(article, idx)));
+  articles.forEach((article, idx) => list.append(buildBentoCard(article, idx)));
 }
 
-export default async function init(block) {
-  const config = readBlockConfig(block);
+/* -----------------------------------------------------------------------
+   Shared init
+   ----------------------------------------------------------------------- */
 
+async function fetchArticles(block, config) {
   const authoredLinks = getAuthoredLinks(block);
   if (authoredLinks.length > 0) {
     let indexRows = [];
@@ -106,29 +195,29 @@ export default async function init(block) {
       );
       return { ...article, keywords: row?.keywords || '' };
     });
-    renderRelatedList(block, articles, 'No related articles.');
-    return;
+    return articles;
   }
 
   const keywords = String(config.keywords || 'random').trim();
   const excluded = String(config['excluded-keywords'] || '').trim();
+  const allArticles = await fetchQueryIndexAll();
+  return matchArticles(allArticles, keywords, excluded, RESULT_LIMIT);
+}
 
-  const list = createTag('ul', {
-    class: 'related-articles-list',
-    role: 'list',
-  });
-  block.textContent = '';
-  block.append(list);
+export default async function init(block) {
+  const config = readBlockConfig(block);
+  const isBento = block.classList.contains('bento');
 
   try {
-    const allArticles = await fetchQueryIndexAll();
-    const matches = matchArticles(allArticles, keywords, excluded, RESULT_LIMIT);
-    if (!matches.length) {
-      block.append(createTag('p', { class: 'related-articles-empty' }, 'No related articles found.'));
-      return;
+    const articles = await fetchArticles(block, config);
+    if (isBento) {
+      renderBentoGrid(block, articles, 'No related articles found.');
+    } else {
+      renderSlider(block, articles, 'No related articles found.');
     }
-    matches.forEach((article, idx) => list.append(buildCard(article, idx)));
   } catch {
-    block.append(createTag('p', { class: 'related-articles-empty' }, 'Unable to load related articles right now.'));
+    const msg = 'Unable to load related articles right now.';
+    block.textContent = '';
+    block.append(createTag('p', { class: 'related-articles-empty' }, msg));
   }
 }

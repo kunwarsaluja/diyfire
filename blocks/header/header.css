@@ -184,7 +184,7 @@ header .nav-brand {
   font-weight: var(--nav-brand-weight);
   line-height: 1;
   letter-spacing: -0.5px;
-  color: var(--color-rust);
+  color: light-dark(var(--color-rust), var(--color-rust-bright));
 }
 
 header nav .nav-brand a:any-link {
@@ -198,9 +198,9 @@ header nav .nav-brand a:any-link:focus-visible {
   opacity: 0.85;
 }
 
-header nav .nav-brand img {
-  width: 150px;
-  height: 50px;
+header nav .nav-brand :is(img, svg) {
+  width: 200px;
+  height: 45px;
   object-fit: contain;
 }
 
@@ -734,9 +734,6 @@ header nav .nav-tools .nav-language-menu a:focus-visible {
   /* tools: right, no shrink */
   header nav .nav-tools {
     flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    gap: var(--nav-gap);
   }
 
   header nav[aria-expanded='true'] {

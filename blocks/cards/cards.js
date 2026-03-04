@@ -77,6 +77,8 @@ function decorateBento(block) {
       if (pictureParent && pictureParent.tagName === 'A' && !pictureParent.children.length) {
         pictureParent.remove();
       }
+    } else {
+      li.classList.add('cards-card-text-only');
     }
 
     // Find and mark the tag/label (first <p> that looks like a category tag)

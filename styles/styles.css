@@ -468,18 +468,23 @@ main img {
   width: 24px;
 }
 
-.icon img {
+.icon :is(img, svg) {
   height: 100%;
   width: 100%;
 }
 
+/* Global logo: adaptive color and consistent size everywhere */
+.icon.icon-logo {
+  width: 200px;
+  height: 45px;
+  color: light-dark(var(--color-rust), var(--color-rust-bright));
+}
+
 main .icon.icon-logo {
-  width: 110px;
-  height: 30px;
   display: inline-block;
   vertical-align: middle;
   padding-right: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 }
 
 /* Reserve space for unsized images to reduce CLS */
