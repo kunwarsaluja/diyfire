@@ -45,13 +45,19 @@ main .section .tabs {
 .tabs .tabs-list {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
+  gap: 0;
   margin: 0 auto var(--space-l);
   max-width: 900px;
-  padding: 0 var(--content-padding-inline) var(--space-xs);
+  padding: 0 var(--space-xs) var(--space-xs);
   overflow-x: auto;
-  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   border-bottom: var(--border-heritage);
+}
+
+.tabs .tabs-list::-webkit-scrollbar {
+  display: none;
 }
 
 .tabs .tabs-list button {
@@ -68,7 +74,7 @@ main .section .tabs {
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0;
-  padding: 22px 30px;
+  padding: 16px 18px;
   opacity: 0.5;
   transition: all 0.3s;
   white-space: nowrap;
@@ -198,7 +204,7 @@ main .section .tabs {
   .tabs .tabs-list {
     justify-content: center;
     overflow-x: visible;
-    padding-bottom: 0;
+    padding: 0 var(--content-padding-inline);
     gap: var(--space-l);
     margin-bottom: 60px;
   }

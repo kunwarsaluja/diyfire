@@ -51,6 +51,15 @@ function updateTabState(tabDefs, selectedId, tabButtons, tabPanels) {
   });
 }
 
+function scrollActiveTab(button, tabList) {
+  // Center the active tab, showing equal peeks of adjacent tabs
+  const listRect = tabList.getBoundingClientRect();
+  const btnRect = button.getBoundingClientRect();
+  const btnStart = btnRect.left - listRect.left + tabList.scrollLeft;
+  const offset = btnStart - (tabList.clientWidth - button.offsetWidth) / 2;
+  tabList.scrollLeft = Math.max(0, offset);
+}
+
 function buildTabsUI(tabDefs, tabsContainer, sectionId = '') {
   const hash = window.location.hash.replace('#', '').toLowerCase();
   const selectedId = tabDefs.find((tabDef) => tabDef.id === hash)?.id || tabDefs[0]?.id;
@@ -95,6 +104,7 @@ function buildTabsUI(tabDefs, tabsContainer, sectionId = '') {
 
     button.addEventListener('click', () => {
       updateTabState(tabDefs, tabDef.id, tabButtons, tabPanels);
+      scrollActiveTab(button, tabList);
       window.history.pushState({}, '', `${window.location.pathname}#${tabDef.id}`);
     });
 
@@ -105,6 +115,13 @@ function buildTabsUI(tabDefs, tabsContainer, sectionId = '') {
   });
 
   tabsWrapper.append(tabList, tabContent);
+
+  // Scroll the initially selected tab into view on load
+  const activeButton = tabButtons[selectedId];
+  if (activeButton) {
+    requestAnimationFrame(() => scrollActiveTab(activeButton, tabList));
+  }
+
   return tabsWrapper;
 }
 
