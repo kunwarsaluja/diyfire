@@ -6,8 +6,6 @@ import {
   useEffect,
 } from 'https://esm.sh/htm/preact/standalone';
 
-const LIVE_URL = 'https://main--diyfire--cloudadoption.aem.live';
-
 // Sync theme changes from header toggle to all embeds on this page
 window.addEventListener('aem-theme-change', (e) => {
   const { theme } = e.detail;
@@ -22,8 +20,9 @@ window.addEventListener('aem-theme-change', (e) => {
 
 function getBaseUrl() {
   const { origin } = window.location;
+  if (origin.includes('.aem.')) return origin;
   if (origin.includes('localhost')) return origin;
-  return LIVE_URL;
+  return 'https://main--diyfire--cloudadoption.aem.live';
 }
 
 function resolveUrl(path) {
