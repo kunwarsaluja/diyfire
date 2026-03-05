@@ -83,17 +83,15 @@ function buildAutoBlocks(main) {
       return true;
     });
     if (fragments.length > 0) {
-      fragments.forEach((a) => { a.parentElement.style.display = 'none'; });
       import('../blocks/fragment/fragment.js').then(({ loadFragment }) => {
         fragments.forEach(async (fragment) => {
-          const container = fragment.parentElement;
           try {
             const { pathname } = new URL(fragment.href);
             const frag = await loadFragment(pathname);
-            container.replaceWith(...frag.children);
+            fragment.parentElement.replaceWith(...frag.children);
             await dynamicBlocks(main);
           } catch (error) {
-            // leave hidden if error
+
             console.error('Fragment loading failed', error);
           }
         });
@@ -101,7 +99,7 @@ function buildAutoBlocks(main) {
     }
     buildEmbedBlocks(main);
   } catch (error) {
-
+     
     console.error('Auto Blocking failed', error);
   }
 }
