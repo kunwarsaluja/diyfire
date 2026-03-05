@@ -252,15 +252,26 @@ function loadDelayed() {
   // load anything that can be postponed to the latest here
 }
 
+/**
+ * Called by aem-embed after decorateMain + block loading.
+ * Runs project-specific post-decoration logic that would
+ * normally happen in loadLazy (e.g. dynamic blocks).
+ */
+export async function decorateEmbed(main) {
+  await dynamicBlocks(main);
+}
+
 export async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
 }
 
-loadPage();
+if (!window.hlx?.suppressLoadPage) {
+  loadPage();
 
-(async function loadDa() {
-  if (!new URL(window.location.href).searchParams.get('dapreview')) return;
-  import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
-}());
+  (async function loadDa() {
+    if (!new URL(window.location.href).searchParams.get('dapreview')) return;
+    import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+  }());
+}

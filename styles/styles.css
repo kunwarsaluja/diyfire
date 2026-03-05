@@ -14,7 +14,8 @@
    Design tokens – use these variables across blocks for consistent styling.
    ========================================================================== */
 
-:root {
+:root,
+:host {
   /* mobile-first breakpoints */
   --bp-tablet: 600px;
   --bp-desktop: 900px;
@@ -154,16 +155,19 @@
   --border-radius-heritage: 24px;
 }
 
-:root[data-theme='light'] {
+:root[data-theme='light'],
+:host([data-theme='light']) {
   color-scheme: light;
 }
 
-:root[data-theme='dark'] {
+:root[data-theme='dark'],
+:host([data-theme='dark']) {
   color-scheme: dark;
 }
 
 @media (width >= 600px) {
-  :root {
+  :root,
+  :host {
     --content-padding-inline: var(--space-l);
     --main-block-space: var(--space-xl);
     --section-block-space: var(--space-xl);
@@ -171,7 +175,8 @@
 }
 
 @media (width >= 900px) {
-  :root {
+  :root,
+  :host {
     --body-font-size-m: 18px;
     --body-font-size-s: 16px;
     --body-font-size-xs: 14px;
@@ -186,7 +191,8 @@
 }
 
 @media (width >= 1200px) {
-  :root {
+  :root,
+  :host {
     --grid-container-width: 1200px;
   }
 }
@@ -236,13 +242,16 @@ html {
 body {
   display: none;
   margin: 0;
-  min-height: 100vh;
   box-sizing: border-box;
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: var(--body-font-family);
   font-size: var(--body-font-size-m);
   line-height: var(--body-line-height);
+}
+
+:root body {
+  min-height: 100vh;
 }
 
 body.appear {
