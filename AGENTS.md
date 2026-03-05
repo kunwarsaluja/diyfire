@@ -15,6 +15,11 @@ When facing trade-offs, follow this order: *Intuitive* (author-friendly) > *Simp
   - Server at http://localhost:3000 with auto-reload
   - View: playwright, puppeteer, or browser; if unavailable, ask human for feedback
   - Inspect delivered HTML/DOM: `curl http://localhost:3000/{path}` (or `.plain.html`) or `console.log` in code
+  - The `curl` commands above return content *before* the decoration pipeline runs. To see the fully decorated HTML after the pipeline runs (sections, blocks, buttons, etc.), use the `decorate` CLI tool (`npm install -g aem-decorate`):
+    - `decorate /path/to/page` — decorated HTML to stdout
+    - `decorate /path/to/page --format md` — decorated output as markdown
+    - `decorate /path/to/page --selector "main .section"` — specific elements only
+    - `decorate /path/to/page --no-header --no-footer` — main content only
 - **Cloudflare Workers** (contact form): `npm run dev:contact-us`, `npm run deploy:contact-us`
 
 ## Stack
