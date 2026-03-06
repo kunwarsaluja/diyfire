@@ -1,8 +1,8 @@
-Demo Project - Cloud Adoption
+AEM Project for  diyfire.ca
 
 ## Environments
-- Preview: https://main--diyfire--cloudadoption.aem.page/
-- Live: https://main--diyfire--cloudadoption.aem.live/
+- Preview: https://main--diyfire--kunwarsaluja.aem.page/
+- Live: https://main--diyfire--kunwarsaluja.aem.live/
 
 ## Documentation
 

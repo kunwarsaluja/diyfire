@@ -3,5 +3,5 @@ Please always provide the [GitHub issue(s)](../issues) your PR is for, as well a
 Fix #<gh-issue-id>
 
 Test URLs:
-- Before: https://main--diyfire--cloudadoption.aem.live/
-- After: https://<branch>--diyfire--cloudadoption.aem.live/
+- Before: https://main--diyfire--kunwarsaluja.aem.live/
+- After: https://<branch>--diyfire--kunwarsaluja.aem.live/
