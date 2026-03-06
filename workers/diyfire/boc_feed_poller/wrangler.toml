@@ -1,0 +1,18 @@
+name = "diyfire-boc-feed-poller"
+main = "index.js"
+compatibility_date = "2026-02-16"
+
+[observability.logs]
+enabled = true
+
+[triggers]
+crons = ["0 0 * * *"]
+
+[vars]
+PRESS_FEED_URL = "https://diyfire-boc-feeds.kunwarsaluja.workers.dev/feed/boc/press-releases"
+UPCOMING_FEED_URL = "https://diyfire-boc-feeds.kunwarsaluja.workers.dev/feed/boc/upcoming-events"
+# Optional: override refresh endpoints if you add dedicated refresh routes later.
+PRESS_REFRESH_URL = "https://diyfire-boc-feeds.kunwarsaluja.workers.dev/feed/boc/press-releases"
+UPCOMING_REFRESH_URL = "https://diyfire-boc-feeds.kunwarsaluja.workers.dev/feed/boc/upcoming-events"
+# Optional boilerplate integration endpoint for future preview/publish automation.
+PREVIEW_PUBLISH_API_URL = ""

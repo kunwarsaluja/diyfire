@@ -1,0 +1,70 @@
+<head>
+  {{#title}}
+  <title>{{title}}</title>
+  <meta name="description" content="{{description}}">
+  <meta name="date" content="{{occurrenceDate}}">
+  {{/title}}
+  {{^title}}
+  <title>{{channel.title}}</title>
+  <meta name="description" content="{{channel.description}}">
+  <meta name="date" content="{{channel.updatedAt}}">
+  {{/title}}
+  <meta name="keywords" content="external, upcoming-events">
+</head>
+<body>
+  <header></header>
+  <main>
+    <div>
+        <div class="hero">
+          <div>
+            <div>
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset="https://main--diyfire--kunwarsaluja.aem.page/learn/media_15d0f4ad5348855d0a7d9faa58c85e01dc2cf428b.jpg"
+                  media="(min-width: 600px)"
+                >
+                <source
+                  type="image/webp"
+                  srcset="https://main--diyfire--kunwarsaluja.aem.page/learn/media_15d0f4ad5348855d0a7d9faa58c85e01dc2cf428b.jpg"
+                >
+                <source
+                  type="image/jpeg"
+                  srcset="https://main--diyfire--kunwarsaluja.aem.page/learn/media_15d0f4ad5348855d0a7d9faa58c85e01dc2cf428b.jpg"
+                  media="(min-width: 600px)"
+                >
+                <img
+                  loading="lazy"
+                  alt=""
+                  src="https://main--diyfire--kunwarsaluja.aem.page/learn/media_15d0f4ad5348855d0a7d9faa58c85e01dc2cf428b.jpg"
+                  width="7000"
+                  height="3677"
+                >
+              </picture>
+            </div>
+          </div>
+          <div>
+            <div>
+              <h1>{{#title}}{{title}}{{/title}}{{^title}}Bank of Canada Press Releases{{/title}}</h1>
+              <h5>{{#description}}{{description}}{{/description}}{{^description}}Latest press release updates.{{/description}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div>
+      <div>
+        <p><strong>Source:</strong> <a href="{{source}}">{{source}}</a></p>
+        <p><strong>Updated:</strong> {{channel.updatedAt}}</p>
+      </div>
+    </div>
+
+    <div>
+      <h2><a href="{{link}}">{{title}}</a></h2>
+      <p><strong>Date:</strong> {{occurrenceDate}}</p>
+      <p>{{description}}</p>
+      <p><strong>ID:</strong> {{id}}</p>
+    </div>
+  </main>
+  <footer></footer>
+</body>

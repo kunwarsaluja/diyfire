@@ -9,35 +9,38 @@ incoming webhook.
 - `POST` -> validates `name` and `message`, posts to Slack webhook
 - other methods -> `405`
 
-Expected POST body (form block sends `{ data: { name, message } }`; flat `{ name, message }` also supported):
+Expected POST body:
 
 ```json
 {
-  "data": {
-    "name": "Jane Doe",
-    "message": "I have a question about..."
-  }
+  "name": "Jane Doe",
+  "message": "I have a question about..."
 }
 ```
 
 ## Required secret
 
+This worker expects the secret:
+
+- `SLACK_WEBHOOK_URL`
+
+Set/update it with:
+
 ```bash
-wrangler secret put SLACK_WEBHOOK_URL --config ./workers/contact_us/wrangler.toml
+wrangler secret put SLACK_WEBHOOK_URL --config ./contact_us/wrangler.toml
 ```
 
 ## Local dev
 
-From project root (where `package.json` lives):
+From `workers/diyfire`:
 
 ```bash
-npm install
 npm run dev:contact-us
 ```
 
 ## Deploy
 
-From project root:
+From `workers/diyfire`:
 
 ```bash
 npm run deploy:contact-us

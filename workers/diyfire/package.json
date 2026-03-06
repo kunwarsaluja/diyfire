@@ -1,0 +1,25 @@
+{
+  "name": "diyfire-workers",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run dev:rss",
+    "deploy": "npm run deploy:rss",
+    "dev:rss": "wrangler dev --config ./rss/wrangler.toml",
+    "deploy:rss": "wrangler deploy --config ./rss/wrangler.toml",
+    "tail:rss": "wrangler tail --config ./rss/wrangler.toml",
+    "dev:boc-feeds": "wrangler dev --config ./boc_feeds/wrangler.toml",
+    "deploy:boc-feeds": "wrangler deploy --config ./boc_feeds/wrangler.toml",
+    "tail:boc-feeds": "wrangler tail --config ./boc_feeds/wrangler.toml",
+    "dev:boc-feed-poller": "wrangler dev --config ./boc_feed_poller/wrangler.toml",
+    "deploy:boc-feed-poller": "wrangler deploy --config ./boc_feed_poller/wrangler.toml",
+    "tail:boc-feed-poller": "wrangler tail --config ./boc_feed_poller/wrangler.toml",
+    "dev:contact-us": "wrangler dev --config ./contact_us/wrangler.toml",
+    "deploy:contact-us": "wrangler deploy --config ./contact_us/wrangler.toml",
+    "tail:contact-us": "wrangler tail --config ./contact_us/wrangler.toml"
+  },
+  "devDependencies": {
+    "wrangler": "^4.54.0"
+  }
+}
