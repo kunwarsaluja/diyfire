@@ -19,8 +19,10 @@ import dynamicBlocks from '../blocks/dynamic/index.js';
 const THEME_STORAGE_KEY = 'diyfire-theme';
 
 function applyTheme(theme) {
-  const t = theme ?? (() => { try { return localStorage.getItem(THEME_STORAGE_KEY); } catch (e) { return null; } })();
-  if (t !== 'light' && t !== 'dark') return;
+  let t = theme ?? (() => { try { return localStorage.getItem(THEME_STORAGE_KEY); } catch (e) { return null; } })();
+  if (t !== 'light' && t !== 'dark') {
+    t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
   document.documentElement.dataset.theme = t;
   document.body.classList.remove('light-scheme', 'dark-scheme');
   document.body.classList.add(`${t}-scheme`);
@@ -69,35 +71,35 @@ async function loadFonts() {
 /** Hash that opts out of fragment auto-blocking (do not block). Links with #_dnb stay as normal links. */
 const DNB_HASH = '#_dnb';
 
+async function loadFragments(section) {
+  const main = section.closest('main');
+  const links = [...section.querySelectorAll('a[href*="/fragments/"]')]
+    .filter((a) => !a.closest('.fragment'));
+  const fragments = links.filter((a) => {
+    if (a.href.includes(DNB_HASH)) {
+      a.href = a.href.replace(DNB_HASH, '').replace(/#$/, '');
+      return false;
+    }
+    return true;
+  });
+  if (fragments.length === 0) return;
+  const { loadFragment } = await import('../blocks/fragment/fragment.js');
+  await Promise.all(fragments.map(async (a) => {
+    try {
+      const { pathname } = new URL(a.href);
+      const frag = await loadFragment(pathname);
+      a.parentElement.replaceWith(...frag.children);
+    } catch (error) {
+      console.error('Fragment loading failed', error);
+    }
+  }));
+  await dynamicBlocks(main);
+}
+
 function buildAutoBlocks(main) {
   try {
-    // auto load `*/fragments/*` references (exclude #_dnb = do not auto-block)
-    const allFragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
-    const fragments = allFragments.filter((a) => {
-      if (a.href.includes(DNB_HASH)) {
-        a.href = a.href.replace(DNB_HASH, '').replace(/#$/, '');
-        return false;
-      }
-      return true;
-    });
-    if (fragments.length > 0) {
-      import('../blocks/fragment/fragment.js').then(({ loadFragment }) => {
-        fragments.forEach(async (fragment) => {
-          try {
-            const { pathname } = new URL(fragment.href);
-            const frag = await loadFragment(pathname);
-            fragment.parentElement.replaceWith(...frag.children);
-            await dynamicBlocks(main);
-          } catch (error) {
-
-            console.error('Fragment loading failed', error);
-          }
-        });
-      });
-    }
     buildEmbedBlocks(main);
   } catch (error) {
-     
     console.error('Auto Blocking failed', error);
   }
 }
@@ -172,7 +174,10 @@ async function loadEager(doc) {
     if (window.isErrorPage) loadErrorPage(main);
     decorateMain(main);
     document.body.classList.add('appear');
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
+    await loadSection(main.querySelector('.section'), async (s) => {
+      await loadFragments(s);
+      await waitForFirstImage(s);
+    });
   }
 
   try {
@@ -196,8 +201,10 @@ async function loadLazy(doc) {
 
   const main = doc.querySelector('main');
   const sections = main ? [...main.querySelectorAll('div.section')] : [];
-  await Promise.all(sections.map((s) => loadSection(s)));
-  if (sections[0] && sampleRUM.enhance) sampleRUM.enhance();
+  for (let i = 0; i < sections.length; i += 1) {
+    await loadSection(sections[i], loadFragments);
+    if (i === 0 && sampleRUM.enhance) sampleRUM.enhance();
+  }
   await dynamicBlocks(main);
 
   const { hash } = window.location;
