@@ -18,16 +18,14 @@ import dynamicBlocks from '../blocks/dynamic/index.js';
 
 const THEME_STORAGE_KEY = 'diyfire-theme';
 
-function applyStoredThemePreference() {
-  try {
-    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-    if (storedTheme !== 'light' && storedTheme !== 'dark') return;
-    document.documentElement.dataset.theme = storedTheme;
-    document.body.classList.remove('light-scheme', 'dark-scheme');
-    document.body.classList.add(`${storedTheme}-scheme`);
-  } catch (e) {
-    // do nothing
+function applyTheme(theme) {
+  let t = theme ?? (() => { try { return localStorage.getItem(THEME_STORAGE_KEY); } catch (e) { return null; } })();
+  if (t !== 'light' && t !== 'dark') {
+    t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
+  document.documentElement.dataset.theme = t;
+  document.body.classList.remove('light-scheme', 'dark-scheme');
+  document.body.classList.add(`${t}-scheme`);
 }
 
 const isYoutubeLink = (url) => ['youtube.com', 'www.youtube.com', 'youtu.be'].includes(url.hostname);
@@ -73,35 +71,35 @@ async function loadFonts() {
 /** Hash that opts out of fragment auto-blocking (do not block). Links with #_dnb stay as normal links. */
 const DNB_HASH = '#_dnb';
 
+async function loadFragments(section) {
+  const main = section.closest('main');
+  const links = [...section.querySelectorAll('a[href*="/fragments/"]')]
+    .filter((a) => !a.closest('.fragment'));
+  const fragments = links.filter((a) => {
+    if (a.href.includes(DNB_HASH)) {
+      a.href = a.href.replace(DNB_HASH, '').replace(/#$/, '');
+      return false;
+    }
+    return true;
+  });
+  if (fragments.length === 0) return;
+  const { loadFragment } = await import('../blocks/fragment/fragment.js');
+  await Promise.all(fragments.map(async (a) => {
+    try {
+      const { pathname } = new URL(a.href);
+      const frag = await loadFragment(pathname);
+      a.parentElement.replaceWith(...frag.children);
+    } catch (error) {
+      console.error('Fragment loading failed', error);
+    }
+  }));
+  await dynamicBlocks(main);
+}
+
 function buildAutoBlocks(main) {
   try {
-    // auto load `*/fragments/*` references (exclude #_dnb = do not auto-block)
-    const allFragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
-    const fragments = allFragments.filter((a) => {
-      if (a.href.includes(DNB_HASH)) {
-        a.href = a.href.replace(DNB_HASH, '').replace(/#$/, '');
-        return false;
-      }
-      return true;
-    });
-    if (fragments.length > 0) {
-      import('../blocks/fragment/fragment.js').then(({ loadFragment }) => {
-        fragments.forEach(async (fragment) => {
-          try {
-            const { pathname } = new URL(fragment.href);
-            const frag = await loadFragment(pathname);
-            fragment.parentElement.replaceWith(...frag.children);
-            await dynamicBlocks(main);
-          } catch (error) {
-
-            console.error('Fragment loading failed', error);
-          }
-        });
-      });
-    }
     buildEmbedBlocks(main);
   } catch (error) {
-     
     console.error('Auto Blocking failed', error);
   }
 }
@@ -118,9 +116,34 @@ function loadErrorPage(main) {
   }
 }
 
+/**
+ * Inline SVG icons that need to inherit currentColor (e.g. logo).
+ * Replaces <img src="…/icon.svg"> with the actual <svg> element
+ * so CSS color and light-dark() work across themes.
+ * @param {Element} scope element tree to search within
+ */
+async function inlineColorIcons(scope) {
+  const icons = scope.querySelectorAll('.icon.icon-logo img[src$=".svg"]');
+  icons.forEach(async (img) => {
+    try {
+      const resp = await fetch(img.src);
+      if (!resp.ok) return;
+      const text = await resp.text();
+      const tmp = document.createElement('div');
+      tmp.innerHTML = text;
+      const svg = tmp.querySelector('svg');
+      if (!svg) return;
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', img.alt || 'Logo');
+      img.replaceWith(svg);
+    } catch (e) { /* keep <img> fallback */ }
+  });
+}
+
 export function decorateMain(main) {
   decorateButtons(main);
   decorateIcons(main);
+  inlineColorIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
@@ -145,13 +168,16 @@ async function loadTemplate(main) {
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
-  applyStoredThemePreference();
+  applyTheme();
   const main = doc.querySelector('main');
   if (main) {
     if (window.isErrorPage) loadErrorPage(main);
     decorateMain(main);
     document.body.classList.add('appear');
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
+    await loadSection(main.querySelector('.section'), async (s) => {
+      await loadFragments(s);
+      await waitForFirstImage(s);
+    });
   }
 
   try {
@@ -165,7 +191,9 @@ async function loadEager(doc) {
 }
 
 async function loadLazy(doc) {
-  loadHeader(doc.querySelector('header'));
+  const headerEl = doc.querySelector('header');
+  const footerEl = doc.querySelector('footer');
+  loadHeader(headerEl);
   const templateName = getMetadata('template');
   if (templateName) {
     await loadTemplate(doc, templateName);
@@ -173,15 +201,30 @@ async function loadLazy(doc) {
 
   const main = doc.querySelector('main');
   const sections = main ? [...main.querySelectorAll('div.section')] : [];
-  await Promise.all(sections.map((s) => loadSection(s)));
-  if (sections[0] && sampleRUM.enhance) sampleRUM.enhance();
+  for (let i = 0; i < sections.length; i += 1) {
+    await loadSection(sections[i], loadFragments);
+    if (i === 0 && sampleRUM.enhance) sampleRUM.enhance();
+  }
   await dynamicBlocks(main);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
 
-  loadFooter(doc.querySelector('footer'));
+  loadFooter(footerEl);
+
+  /* inline logo SVGs in header/footer once they are decorated */
+  const waitAndInline = (el) => {
+    const observer = new MutationObserver(() => {
+      if (el.querySelector('.icon.icon-logo img[src$=".svg"]')) {
+        observer.disconnect();
+        inlineColorIcons(el);
+      }
+    });
+    observer.observe(el, { childList: true, subtree: true });
+  };
+  waitAndInline(headerEl);
+  waitAndInline(footerEl);
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
@@ -212,6 +255,15 @@ function loadDelayed() {
   // load anything that can be postponed to the latest here
 }
 
+/**
+ * Called by aem-embed after decorateMain + block loading.
+ * Runs project-specific post-decoration logic that would
+ * normally happen in loadLazy (e.g. dynamic blocks).
+ */
+export async function decorateEmbed(main) {
+  await dynamicBlocks(main);
+}
+
 export async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
@@ -223,9 +275,15 @@ if (/\.(stage-ue|ue)\.da\.live$/.test(window.location.hostname)) {
   await import(`${window.hlx.codeBasePath}/ue/scripts/ue.js`).then(({ default: ue }) => ue());
 }
 
-loadPage();
+if (!window.hlx?.suppressLoadPage) {
+  loadPage();
 
-(async function loadDa() {
-  if (!new URL(window.location.href).searchParams.get('dapreview')) return;
-  import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
-}());
+  (async function loadDa() {
+    if (!new URL(window.location.href).searchParams.get('dapreview')) return;
+    import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+  }());
+
+  window.addEventListener('aem-theme-change', (e) => {
+    applyTheme(e.detail?.theme);
+  });
+}

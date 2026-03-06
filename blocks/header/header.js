@@ -6,9 +6,10 @@
 
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
+import { getBlockContext } from '../../scripts/shared.js';
 
 const DESKTOP = window.matchMedia('(min-width: 900px)');
-const THEME_KEY = 'color-scheme';
+const THEME_KEY = 'diyfire-theme';
 
 function getNavPath() {
   const meta = getMetadata('nav');
@@ -72,7 +73,7 @@ function decorateMega(li) {
 
   // Position dropdown: full viewport width, arrow under trigger
   const sync = () => {
-    if (!document.body.contains(li)) return;
+    if (!li.isConnected) return;
     const trigger = li.querySelector(':scope > p');
     const menu = li.querySelector(':scope > ul');
     if (!trigger || !menu) return;
@@ -135,23 +136,22 @@ function initTheme(tools) {
   const get = () => {
     try {
       const s = localStorage.getItem(THEME_KEY);
-      if (s === 'light-scheme' || s === 'dark-scheme') return s;
+      if (s === 'light' || s === 'dark') return s;
     } catch (e) { /* ignore */ }
-    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark-scheme' : 'light-scheme';
+    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   };
   const set = (s) => {
-    if (s !== 'light-scheme' && s !== 'dark-scheme') return;
-    document.body.classList.remove('light-scheme', 'dark-scheme');
-    document.body.classList.add(s);
+    if (s !== 'light' && s !== 'dark') return;
     try { localStorage.setItem(THEME_KEY, s); } catch (e) { /* ignore */ }
+    window.dispatchEvent(new CustomEvent('aem-theme-change', { detail: { theme: s } }));
   };
 
   btn.classList.add('nav-tool');
   btn.setAttribute('role', 'button');
   btn.setAttribute('tabindex', '0');
-  const updateLabel = () => btn.setAttribute('aria-label', `Switch to ${get() === 'dark-scheme' ? 'light' : 'dark'} mode`);
+  const updateLabel = () => btn.setAttribute('aria-label', `Switch to ${get() === 'dark' ? 'light' : 'dark'} mode`);
   const toggle = () => {
-    set(get() === 'dark-scheme' ? 'light-scheme' : 'dark-scheme');
+    set(get() === 'dark' ? 'light' : 'dark');
     updateLabel();
   };
   btn.addEventListener('click', toggle);
@@ -311,7 +311,7 @@ function decorateLanguageMenu(menu) {
   });
 }
 
-function initLanguage(tools) {
+function initLanguage(tools, eventRoot) {
   const globe = tools.querySelector('.icon-globe')?.closest('p, button, a, div');
   const menu = globe ? findLangMenu(tools, globe) : null;
   if (!globe || !menu) return;
@@ -340,16 +340,16 @@ function initLanguage(tools) {
   };
 
   globe.addEventListener('click', (e) => { e.preventDefault(); toggle(); });
-  document.addEventListener('click', (e) => { if (!tools.contains(e.target)) { menu.hidden = true; globe.setAttribute('aria-expanded', 'false'); } });
-  document.addEventListener('keydown', (e) => { if (e.code === 'Escape') { menu.hidden = true; globe.setAttribute('aria-expanded', 'false'); } });
+  eventRoot.addEventListener('click', (e) => { if (!tools.contains(e.target)) { menu.hidden = true; globe.setAttribute('aria-expanded', 'false'); } });
+  eventRoot.addEventListener('keydown', (e) => { if (e.code === 'Escape') { menu.hidden = true; globe.setAttribute('aria-expanded', 'false'); } });
   menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { menu.hidden = true; globe.setAttribute('aria-expanded', 'false'); }));
 
   decorateLanguageMenu(menu);
 }
 
-function toggleMobile(nav, open) {
+function toggleMobile(nav, open, body) {
   const isOpen = open === undefined ? nav.getAttribute('aria-expanded') !== 'true' : open;
-  document.body.style.overflowY = isOpen && !DESKTOP.matches ? 'hidden' : '';
+  body.style.overflowY = isOpen && !DESKTOP.matches ? 'hidden' : '';
   nav.setAttribute('aria-expanded', isOpen);
   nav.querySelector('.nav-hamburger button')?.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
   nav.querySelectorAll('.nav-drop').forEach((d) => d.setAttribute('tabindex', DESKTOP.matches ? '0' : '-1'));
@@ -358,16 +358,28 @@ function toggleMobile(nav, open) {
 const NAV_ITEMS = '.default-content-wrapper > ul > li';
 
 export default async function decorate(block) {
-  const fragment = await loadFragment(getNavPath());
-  if (!fragment) return;
+  const { body, eventRoot } = getBlockContext(block);
 
-  block.textContent = '';
-  const nav = document.createElement('nav');
-  nav.id = 'nav';
-  nav.setAttribute('aria-label', 'Main');
-  nav.setAttribute('aria-expanded', 'false');
+  // Load nav content (skip if aem-embed already provided content)
+  if (block.textContent === '') {
+    const fragment = await loadFragment(getNavPath());
+    if (!fragment) return;
 
-  while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+    block.textContent = '';
+    const nav = document.createElement('nav');
+    nav.id = 'nav';
+    nav.setAttribute('aria-label', 'Main');
+    nav.setAttribute('aria-expanded', 'false');
+
+    while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+    block.append(nav);
+  }
+
+  const nav = block.querySelector('nav');
+  if (!nav) return;
+  if (!nav.id) nav.id = 'nav';
+  if (!nav.getAttribute('aria-label')) nav.setAttribute('aria-label', 'Main');
+  if (!nav.getAttribute('aria-expanded')) nav.setAttribute('aria-expanded', 'false');
 
   ['brand', 'sections', 'tools'].forEach((c, i) => nav.children[i]?.classList.add(`nav-${c}`));
 
@@ -396,17 +408,17 @@ export default async function decorate(block) {
   const hamburger = document.createElement('div');
   hamburger.className = 'nav-hamburger';
   hamburger.innerHTML = '<button type="button" aria-controls="nav" aria-label="Open navigation"><span class="nav-hamburger-icon"></span></button>';
-  hamburger.onclick = () => toggleMobile(nav);
+  hamburger.onclick = () => toggleMobile(nav, undefined, body);
 
-  document.addEventListener('click', (e) => {
+  eventRoot.addEventListener('click', (e) => {
     if (!DESKTOP.matches && nav.getAttribute('aria-expanded') === 'true' && !nav.contains(e.target)) {
-      toggleMobile(nav, false);
+      toggleMobile(nav, false, body);
     }
   });
-  document.addEventListener('keydown', (e) => {
+  eventRoot.addEventListener('keydown', (e) => {
     if (e.code !== 'Escape') return;
     if (!DESKTOP.matches && nav.getAttribute('aria-expanded') === 'true') {
-      toggleMobile(nav, false);
+      toggleMobile(nav, false, body);
     } else if (DESKTOP.matches && nav.querySelector('.nav-drop[aria-expanded="true"]')) {
       collapseAll(nav);
     }
@@ -418,14 +430,14 @@ export default async function decorate(block) {
   wrapper.append(nav);
   block.append(wrapper);
 
-  toggleMobile(nav, false);
+  toggleMobile(nav, false, body);
   collapseAll(nav);
-  DESKTOP.addEventListener('change', () => toggleMobile(nav, false));
+  DESKTOP.addEventListener('change', () => toggleMobile(nav, false, body));
 
   if (tools) {
     initTheme(tools);
     initSearch(tools);
-    initLanguage(tools);
+    initLanguage(tools, eventRoot);
     hydrateTranslateFromCookie();
   }
 

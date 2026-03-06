@@ -1,38 +1,31 @@
-main > .section > .teaser-wrapper,
-main .default-content-wrapper > .section.teaser-container {
-  width: 100vw;
-  max-width: none;
-  margin-inline: calc(50% - 50vw);
-  padding: 0;
-}
-
-main .section.teaser-container .teaser-wrapper {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 0;
-}
+/* Teaser block – Heritage Elite */
 
 main .teaser {
-  width: 100%;
-  background-color: light-dark(var(--color-gray-100), var(--color-gray-800));
-  color: light-dark(var(--color-gray-900), var(--color-gray-100));
+  background: light-dark(var(--color-parchment), var(--color-card-dark));
+  border: var(--border-heritage);
+  border-radius: var(--border-radius-heritage);
   text-align: center;
+  font-family: var(--font-family-serif);
   font-size: var(--body-font-size-m);
   font-weight: 500;
+  color: light-dark(var(--color-ink), var(--color-parchment));
 }
 
 main .teaser > div {
   align-items: center;
   gap: var(--space-s);
-  max-width: var(--grid-container-width);
-  margin: 0 auto;
-  padding: var(--space-m) var(--content-padding-inline);
+  padding: var(--space-l) var(--content-padding-inline);
 }
 
 main .teaser > div > div a {
-  color: inherit;
+  color: light-dark(var(--color-rust), var(--color-rust-bright));
   text-decoration: underline;
   text-underline-offset: 0.15em;
+  text-decoration-color: var(--color-gold);
   padding-inline-start: 0.5em;
+  transition: color 0.3s;
+}
+
+main .teaser > div > div a:hover {
+  color: var(--color-gold);
 }

@@ -4,7 +4,7 @@
 
 import { loadFragment } from '../fragment/fragment.js';
 import { loadCSS } from '../../scripts/aem.js';
-import { createTag } from '../../scripts/shared.js';
+import { createTag, getBlockContext } from '../../scripts/shared.js';
 import dynamicBlocks from '../dynamic/index.js';
 
 const FRAGMENT_PREFIX = '/fragments/';
@@ -19,9 +19,11 @@ function getFragmentPath(href = '') {
   }
 }
 
-export function setupFragmentModal() {
+export function setupFragmentModal(el) {
   if (window.__fragmentModalReady) return;
   window.__fragmentModalReady = true;
+
+  const { eventRoot } = getBlockContext(el);
 
   loadCSS(`${window.hlx.codeBasePath}/blocks/modal/modal.css`);
 
@@ -34,21 +36,21 @@ export function setupFragmentModal() {
     'aria-label': 'Dialog',
   }, [closeBtn, content]);
   const backdrop = createTag('div', { class: 'modal-backdrop', 'aria-hidden': 'true' });
-  const root = createTag('div', { class: 'modal', hidden: 'true' }, [backdrop, dialog]);
-  document.body.append(root);
+  const modalRoot = createTag('div', { class: 'modal', hidden: 'true' }, [backdrop, dialog]);
+  document.body.append(modalRoot);
   let previousOverflow = '';
   let previousFocus = null;
 
   const close = () => {
-    root.hidden = true;
+    modalRoot.hidden = true;
     content.replaceChildren();
     document.body.style.overflow = previousOverflow;
     if (previousFocus?.focus) previousFocus.focus();
   };
 
   const open = async (path) => {
-    previousFocus = document.activeElement;
-    root.hidden = false;
+    previousFocus = el.getRootNode().activeElement;
+    modalRoot.hidden = false;
     previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     content.textContent = 'Loading...';
@@ -72,11 +74,11 @@ export function setupFragmentModal() {
 
   closeBtn.addEventListener('click', close);
   backdrop.addEventListener('click', close);
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !root.hidden) close();
+  eventRoot.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modalRoot.hidden) close();
   });
 
-  document.addEventListener('click', (e) => {
+  eventRoot.addEventListener('click', (e) => {
     const link = e.target.closest('main a[href*="/fragments/"]');
     if (!link) return;
     if (link.closest('header, footer, nav, .modal')) return;
@@ -90,6 +92,6 @@ export function setupFragmentModal() {
 }
 
 export default function decorate(block) {
-  setupFragmentModal();
+  setupFragmentModal(block);
   block.style.display = 'none';
 }

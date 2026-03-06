@@ -267,3 +267,21 @@ export function createChart(canvas, config) {
 export function isUE() {
   return window.location.hostname.includes('ue.da') || window.location.host.includes('localhost:4712');
 }
+
+/**
+ * Resolve DOM context for a block element.
+ * Returns the correct body and event root whether the block runs
+ * in the normal document or inside a shadow DOM (aem-embed).
+ * @param {Element} block
+ * @returns {{ root: Document|ShadowRoot, body: HTMLElement, eventRoot: Document|ShadowRoot, isEmbed: boolean }}
+ */
+export function getBlockContext(block) {
+  const root = block.getRootNode();
+  const isEmbed = root !== document;
+  return {
+    root,
+    body: isEmbed ? root.querySelector('body') : document.body,
+    eventRoot: isEmbed ? root : document,
+    isEmbed,
+  };
+}

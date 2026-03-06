@@ -17,7 +17,7 @@ import dynamicBlocks from '../dynamic/index.js';
 /**
  * Loads a fragment.
  * @param {string} path The path to the fragment
- * @returns {HTMLElement} The root element of the fragment
+ * @returns {Promise<HTMLElement>} The root element of the fragment
  */
 export async function loadFragment(path) {
   if (path && path.startsWith('/') && !path.startsWith('//')) {
@@ -49,7 +49,7 @@ export default async function decorate(block) {
   const fragment = await loadFragment(path);
   if (fragment) {
     block.replaceChildren(...fragment.childNodes);
-    const main = document.querySelector('main');
+    const main = block.closest('main');
     if (main) await dynamicBlocks(main);
   }
 }

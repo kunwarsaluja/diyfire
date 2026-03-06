@@ -4,17 +4,7 @@
  * https://www.hlx.live/developer/block-collection/embed
  */
 
-const loadScript = (url, callback, type) => {
-  const head = document.querySelector('head');
-  const script = document.createElement('script');
-  script.src = url;
-  if (type) {
-    script.setAttribute('type', type);
-  }
-  script.onload = callback;
-  head.append(script);
-  return script;
-};
+import { loadScript } from '../../scripts/aem.js';
 
 const getDefaultEmbed = (url) => `<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;">
     <iframe src="${url.href}" style="border: 0; top: 0; left: 0; width: 100%; height: 100%; position: absolute;" allowfullscreen=""

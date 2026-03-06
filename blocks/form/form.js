@@ -506,7 +506,7 @@ async function replaceWithThankYou(form, confirmationPath) {
   const tmp = document.createElement('div');
   tmp.setAttribute('hidden', '');
   tmp.appendChild(fragmentBlock);
-  document.body.appendChild(tmp);
+  block.parentElement.appendChild(tmp);
 
   try {
     decorateBlock(fragmentBlock);
