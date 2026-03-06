@@ -1,0 +1,194 @@
+main .fire-tracker {
+  max-width: var(--grid-container-width);
+  margin: 0 auto;
+  padding: var(--space-m) var(--content-padding-inline);
+}
+
+main .fire-tracker .fire-tracker-root {
+  display: grid;
+  gap: var(--space-s);
+}
+
+main .fire-tracker .fire-tracker-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+main .fire-tracker .fire-tracker-presets-label {
+  margin: 0;
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+}
+
+main .fire-tracker .fire-tracker-legend {
+  margin: 0 0 var(--space-xs);
+  border: 1px dashed light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+
+main .fire-tracker .fire-tracker-legend summary {
+  cursor: pointer;
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+}
+
+main .fire-tracker .fire-tracker-legend ul {
+  margin: var(--space-xs) 0 0;
+  padding-inline-start: 18px;
+  display: grid;
+  gap: 4px;
+  font-size: var(--body-font-size-s);
+  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+}
+
+main .fire-tracker .fire-tracker-presets button {
+  border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 999px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: var(--body-font-size-s);
+  color: inherit;
+  background: light-dark(var(--color-light), rgb(21 25 31));
+  cursor: pointer;
+}
+
+main .fire-tracker .fire-tracker-presets button.is-active {
+  border-color: var(--color-accent);
+  background: light-dark(rgb(57 96 119 / 10%), rgb(57 96 119 / 22%));
+}
+
+main .fire-tracker .fire-tracker-layout {
+  display: grid;
+  gap: var(--space-s);
+}
+
+main .fire-tracker .fire-tracker-form {
+  display: grid;
+  gap: var(--space-xs);
+  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border-radius: 12px;
+  padding: var(--space-s);
+  background: light-dark(rgb(255 255 255 / 78%), rgb(17 20 25 / 60%));
+}
+
+main .fire-tracker .fire-tracker-group {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+main .fire-tracker .fire-tracker-row {
+  display: grid;
+  gap: 4px;
+}
+
+main .fire-tracker .fire-tracker-label {
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+}
+
+main .fire-tracker .fire-tracker-tip {
+  color: light-dark(var(--color-gray-600), var(--color-gray-300));
+  cursor: help;
+}
+
+main .fire-tracker .fire-tracker-input {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+main .fire-tracker input[type='number'],
+main .fire-tracker input[type='text'],
+main .fire-tracker select {
+  inline-size: 100%;
+  border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  color: inherit;
+  background: light-dark(var(--color-light), rgb(25 29 35));
+}
+
+main .fire-tracker input[type='range'] {
+  inline-size: 100%;
+}
+
+main .fire-tracker .fire-tracker-suffix {
+  white-space: nowrap;
+  font-size: var(--body-font-size-s);
+  color: light-dark(var(--color-gray-600), var(--color-gray-300));
+}
+
+main .fire-tracker .fire-tracker-toggle {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  border: 1px dashed light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+main .fire-tracker .fire-tracker-toggle input {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+main .fire-tracker .fire-tracker-optional {
+  border: 1px dashed light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+
+main .fire-tracker .fire-tracker-optional summary {
+  margin: 0;
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+main .fire-tracker .fire-tracker-optional[open] summary {
+  margin-bottom: var(--space-xs);
+}
+
+main .fire-tracker .fire-tracker-subtitle {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--heading-font-size-xs);
+}
+
+main .fire-tracker .fire-tracker-output {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+main .fire-tracker .fire-tracker-metric {
+  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border-radius: 12px;
+  padding: var(--space-s);
+  background: light-dark(var(--color-light), rgb(21 25 31));
+}
+
+main .fire-tracker .fire-tracker-metric h3 {
+  margin: 0 0 6px;
+  font-size: var(--heading-font-size-xs);
+}
+
+main .fire-tracker .fire-tracker-metric-value {
+  margin: 0 0 6px;
+  font-size: clamp(20px, 1.8vw, 28px);
+  line-height: 1.2;
+}
+
+main .fire-tracker .fire-tracker-metric-note {
+  margin: 0;
+  font-size: var(--body-font-size-s);
+  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+}
+
+@media (width >= 900px) {
+  main .fire-tracker .fire-tracker-layout {
+    grid-template-columns: minmax(300px, 420px) 1fr;
+    align-items: start;
+  }
+}

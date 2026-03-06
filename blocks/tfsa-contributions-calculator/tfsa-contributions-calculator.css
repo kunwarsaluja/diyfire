@@ -1,0 +1,152 @@
+main .tfsa-contributions-calculator {
+  max-width: var(--grid-container-width);
+  margin: 0 auto;
+  padding: var(--space-m) var(--content-padding-inline);
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-legend {
+  margin: 0 0 var(--space-s);
+  border: 1px dashed light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-legend summary {
+  cursor: pointer;
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-legend-content {
+  margin: var(--space-xs) 0 0;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-legend ul {
+  margin: 0;
+  padding-inline-start: 18px;
+  display: grid;
+  gap: 4px;
+  font-size: var(--body-font-size-s);
+  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-disclaimer {
+  margin: var(--space-s) 0 0;
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-layout {
+  display: grid;
+  gap: var(--space-s);
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-form {
+  display: grid;
+  gap: var(--space-xs);
+  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border-radius: 12px;
+  padding: var(--space-s);
+  background: light-dark(rgb(255 255 255 / 78%), rgb(17 20 25 / 60%));
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-group {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-row {
+  display: grid;
+  gap: 4px;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-label {
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-tip {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 4px;
+  color: light-dark(var(--color-gray-600), var(--color-gray-300));
+  cursor: help;
+  vertical-align: middle;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-tip svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+main .tfsa-contributions-calculator input[type='number'],
+main .tfsa-contributions-calculator select {
+  inline-size: 100%;
+  border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  color: inherit;
+  background: light-dark(var(--color-light), rgb(25 29 35));
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-suffix {
+  font-size: var(--body-font-size-s);
+  color: light-dark(var(--color-gray-600), var(--color-gray-300));
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-toggle {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  border: 1px dashed light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-toggle input {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-output {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-metric {
+  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border-radius: 12px;
+  padding: var(--space-s);
+  background: light-dark(var(--color-light), rgb(21 25 31));
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-metric h3 {
+  margin: 0 0 6px;
+  font-size: var(--heading-font-size-xs);
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-metric-value {
+  margin: 0 0 6px;
+  font-size: clamp(20px, 1.8vw, 28px);
+  line-height: 1.2;
+}
+
+main .tfsa-contributions-calculator .tfsa-contributions-calculator-metric-note {
+  margin: 0;
+  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+  font-size: var(--body-font-size-s);
+}
+
+@media (width >= 900px) {
+  main .tfsa-contributions-calculator .tfsa-contributions-calculator-layout {
+    grid-template-columns: minmax(260px, 390px) 1fr;
+    align-items: start;
+  }
+}

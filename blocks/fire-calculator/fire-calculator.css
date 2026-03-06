@@ -1,0 +1,190 @@
+main .fire-calculator {
+  max-width: var(--grid-container-width);
+  margin: 0 auto;
+  padding: var(--space-m) var(--content-padding-inline);
+}
+
+main .fire-calculator .fire-calculator-presets {
+  margin: 0 0 var(--space-xs);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+main .fire-calculator .fire-calculator-presets-label {
+  margin: 0;
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+}
+
+main .fire-calculator .fire-calculator-legend {
+  margin: 0 0 var(--space-s);
+  border: 1px dashed light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+
+main .fire-calculator .fire-calculator-legend summary {
+  cursor: pointer;
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+}
+
+main .fire-calculator .fire-calculator-legend ul {
+  margin: var(--space-xs) 0 0;
+  padding-inline-start: 18px;
+  display: grid;
+  gap: 4px;
+  font-size: var(--body-font-size-s);
+  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+}
+
+main .fire-calculator .fire-calculator-preset-btn {
+  border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 999px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: var(--body-font-size-s);
+  color: inherit;
+  background: light-dark(var(--color-light), rgb(21 25 31));
+  cursor: pointer;
+}
+
+main .fire-calculator .fire-calculator-preset-btn.is-active {
+  border-color: var(--color-accent);
+  background: light-dark(rgb(57 96 119 / 10%), rgb(57 96 119 / 20%));
+}
+
+main .fire-calculator .fire-calculator-layout {
+  display: grid;
+  gap: var(--space-s);
+}
+
+main .fire-calculator .fire-calculator-form {
+  display: grid;
+  gap: var(--space-xs);
+  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border-radius: 12px;
+  padding: var(--space-s);
+  background: light-dark(rgb(255 255 255 / 78%), rgb(17 20 25 / 60%));
+}
+
+main .fire-calculator .fire-calculator-group {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+main .fire-calculator .fire-calculator-row {
+  display: grid;
+  gap: 4px;
+}
+
+main .fire-calculator .fire-calculator-label {
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+}
+
+main .fire-calculator .fire-calculator-tip {
+  font-weight: 400;
+  color: light-dark(var(--color-gray-600), var(--color-gray-300));
+  cursor: help;
+}
+
+main .fire-calculator .fire-calculator-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+main .fire-calculator input[type='number'],
+main .fire-calculator input[type='text'] {
+  inline-size: 100%;
+  border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  color: inherit;
+  background: light-dark(var(--color-light), rgb(25 29 35));
+}
+
+main .fire-calculator input[type='range'] {
+  inline-size: 100%;
+}
+
+main .fire-calculator .fire-calculator-suffix {
+  white-space: nowrap;
+  font-size: var(--body-font-size-s);
+  color: light-dark(var(--color-gray-600), var(--color-gray-300));
+}
+
+main .fire-calculator .fire-calculator-toggle {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  border: 1px dashed light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+main .fire-calculator .fire-calculator-toggle input {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+main .fire-calculator .fire-calculator-subtitle {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--heading-font-size-xs);
+}
+
+main .fire-calculator .fire-calculator-optional {
+  border: 1px dashed light-dark(var(--color-gray-300), var(--color-gray-600));
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+
+main .fire-calculator .fire-calculator-optional summary {
+  cursor: pointer;
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+  margin: 0;
+}
+
+main .fire-calculator .fire-calculator-optional[open] summary {
+  margin-bottom: var(--space-xs);
+}
+
+main .fire-calculator .fire-calculator-output {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+main .fire-calculator .fire-calculator-metric {
+  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border-radius: 12px;
+  padding: var(--space-s);
+  background: light-dark(var(--color-light), rgb(21 25 31));
+}
+
+main .fire-calculator .fire-calculator-metric h3 {
+  margin: 0 0 8px;
+  font-size: var(--heading-font-size-xs);
+}
+
+main .fire-calculator .fire-calculator-metric-value {
+  margin: 0 0 6px;
+  font-size: clamp(20px, 1.8vw, 28px);
+  line-height: 1.2;
+}
+
+main .fire-calculator .fire-calculator-metric-note {
+  margin: 0;
+  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+  font-size: var(--body-font-size-s);
+}
+
+@media (width >= 900px) {
+  main .fire-calculator .fire-calculator-layout {
+    grid-template-columns: minmax(260px, 390px) 1fr;
+    align-items: start;
+  }
+}
