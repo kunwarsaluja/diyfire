@@ -746,12 +746,7 @@ export default function decorate(block) {
             const data = Array.isArray(raw) ? raw : (raw?.fields && Array.isArray(raw.fields) ? raw.fields : null);
             if (!data || !Array.isArray(data)) throw new Error(`No form fields at ${source}`);
             const form = buildForm(data, submit);
-            const configRow = block.querySelector(':scope > div');
-            if (configRow) {
-              block.replaceChildren(configRow, form);
-            } else {
-              block.replaceChildren(form);
-            }
+            block.replaceChildren(form);
             block.removeAttribute('style');
           } catch (error) {
              
