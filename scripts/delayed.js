@@ -22,12 +22,7 @@ async function injectSocialShareBlock() {
   wrapper.append(block);
   section.append(wrapper);
 
-  const firstSection = main.querySelector(':scope > div.section');
-  if (firstSection) {
-    firstSection.insertAdjacentElement('afterend', section);
-  } else {
-    main.append(section);
-  }
+  main.append(section);
 
   decorateBlock(block);
   await loadBlock(block);
