@@ -98,6 +98,7 @@ header nav a:any-link {
 /* hamburger – mobile */
 header nav .nav-hamburger {
   grid-area: hamburger;
+  justify-self: start;
   height: 22px;
   display: flex;
   align-items: center;
@@ -179,6 +180,10 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
 /* brand */
 header .nav-brand {
   grid-area: brand;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: stretch;
   min-width: 0;
   font-family: var(--font-family-serif);
   font-size: var(--nav-brand-size);
@@ -197,6 +202,11 @@ header nav .nav-brand a:any-link {
 header nav .nav-brand a:any-link:hover,
 header nav .nav-brand a:any-link:focus-visible {
   opacity: 0.85;
+}
+
+header nav .nav-brand .icon.icon-logo {
+  position: relative;
+  top: 5px;
 }
 
 header nav .nav-brand :is(img, svg) {
@@ -528,6 +538,7 @@ header nav .nav-sections .default-content-wrapper > ul > li > ul a.button:any-li
 /* tools – mobile */
 header nav .nav-tools {
   grid-area: tools;
+  justify-self: end;
   display: flex;
   align-items: center;
   gap: var(--nav-gap);
@@ -683,7 +694,50 @@ header nav .nav-tools .nav-language-menu a:focus-visible {
   }
 }
 
-/* very small phones: prevent header row clipping */
+/* small phones: prevent header row clipping */
+@media (width <= 430px) {
+  header {
+    --nav-padding: var(--space-s);
+    --nav-gap: 6px;
+  }
+
+  header nav {
+    gap: 0 var(--nav-gap);
+  }
+
+  header nav .nav-brand :is(img, svg) {
+    width: min(138px, 37vw);
+    height: 36px;
+  }
+
+  header nav .nav-brand .icon.icon-logo {
+    width: 100px;
+    height: 40px;
+  }
+
+  header nav .nav-tools {
+    gap: 4px;
+    min-width: 0;
+  }
+
+  header nav .nav-tools .nav-search-input {
+    width: min(98px, 26vw);
+    padding: var(--space-xs) 32px var(--space-xs) var(--space-s);
+    font-size: var(--body-font-size-xs);
+  }
+
+  header nav .nav-tools .nav-tool,
+  header nav .nav-tools a.button.nav-tool:any-link {
+    padding: var(--space-xs);
+  }
+
+  header nav .nav-tools .icon img {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* very small phones */
 @media (width <= 350px) {
   header {
     --nav-padding: var(--space-s);
@@ -691,12 +745,12 @@ header nav .nav-tools .nav-language-menu a:focus-visible {
   }
 
   header nav .nav-brand :is(img, svg) {
-    width: min(150px, 46vw);
+    width: min(120px, 40vw);
     height: 38px;
   }
 
   header nav .nav-tools .nav-search-input {
-    width: 105px;
+    width: 82px;
     padding: var(--space-xs) 34px var(--space-xs) var(--space-s);
   }
 }
