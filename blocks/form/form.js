@@ -1,4 +1,5 @@
 import { toCamelCase, toClassName, buildBlock, decorateBlock, loadBlock } from '../../scripts/aem.js';
+import { isUE } from '../../scripts/shared.js';
 
 /**
  * Creates an HTML element with an optional class name
@@ -730,6 +731,7 @@ function buildForm(fields, submit) {
  * @param {HTMLElement} block - Form block element
  */
 export default function decorate(block) {
+  if (isUE()) return;
   block.style.visibility = 'hidden';
   const [source, submit] = [...block.querySelectorAll('a[href]')].map((a) => a.href);
   if (source) {
@@ -744,7 +746,12 @@ export default function decorate(block) {
             const data = Array.isArray(raw) ? raw : (raw?.fields && Array.isArray(raw.fields) ? raw.fields : null);
             if (!data || !Array.isArray(data)) throw new Error(`No form fields at ${source}`);
             const form = buildForm(data, submit);
-            block.replaceChildren(form);
+            const configRow = block.querySelector(':scope > div');
+            if (configRow) {
+              block.replaceChildren(configRow, form);
+            } else {
+              block.replaceChildren(form);
+            }
             block.removeAttribute('style');
           } catch (error) {
              

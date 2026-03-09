@@ -1,4 +1,5 @@
 import { createTag } from '../../scripts/shared.js';
+import { moveInstrumentation } from '../../ue/scripts/ue-utils.js';
 
 function buildStep(row, index) {
   const cols = [...row.children];
@@ -6,12 +7,14 @@ function buildStep(row, index) {
   const contentSource = cols[1];
   if (!titleSource || !contentSource) return null;
 
+  const titleText = titleSource.textContent.trim() || `Step ${index + 1}`;
   const title = createTag('h3', { class: 'journey-map-step-title' });
   title.append(...[...titleSource.childNodes]);
-  const titleText = titleSource.textContent.trim() || `Step ${index + 1}`;
+  moveInstrumentation(titleSource, title);
 
   const content = createTag('div', { class: 'journey-map-step-content' });
   content.append(...[...contentSource.childNodes]);
+  moveInstrumentation(contentSource, content);
 
   const toggle = createTag('button', {
     type: 'button',
@@ -26,6 +29,7 @@ function buildStep(row, index) {
     class: 'journey-map-step',
     'data-step-index': String(index),
   }, [toggle, content]);
+  moveInstrumentation(row, step);
 
   return {
     step,

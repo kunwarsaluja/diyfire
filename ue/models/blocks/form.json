@@ -1,0 +1,43 @@
+{
+  "definitions": [
+    {
+      "title": "Form",
+      "id": "form",
+      "model": "form",
+      "plugins": {
+        "da": {
+          "name": "form",
+          "rows": 2,
+          "columns": 1,
+          "fields": [
+            { "name": "source", "selector": "div:nth-child(1)>div>p" },
+            { "name": "actionUrl", "selector": "div:nth-child(2)>div>p" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "form",
+      "fields": [
+        {
+          "component": "richtext",
+          "name": "source",
+          "label": "Form Source URL",
+          "valueType": "string",
+          "required": true,
+          "description": "URL to the JSON form definition"
+        },
+        {
+          "component": "richtext",
+          "name": "actionUrl",
+          "label": "Submit Endpoint",
+          "valueType": "string",
+          "description": "URL where form data is submitted"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

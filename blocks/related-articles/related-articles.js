@@ -8,11 +8,25 @@ import {
   getContentTimestamp,
   normalizePath,
   parseKeywords,
+  pathFromHref,
   resolveArticlesFromIndex,
   shuffle,
 } from '../../scripts/shared.js';
 
 const RESULT_LIMIT = 5;
+
+function getLinksFromBlock(block) {
+  const linksUl = block.querySelector(':scope > div:nth-child(2) > div:nth-child(1) ul')
+    || block.querySelector(':scope > div:nth-child(1) > div:nth-child(1) ul');
+  const anchors = linksUl?.querySelectorAll('a[href]') || [];
+  return [...anchors].map((a) => {
+    const path = pathFromHref(a.href);
+    const rawTitle = (a.textContent || '').trim();
+    const looksLikeUrl = /^https?:\/\//i.test(rawTitle) || rawTitle.length > 80;
+    const title = looksLikeUrl ? '' : rawTitle;
+    return { path, title };
+  }).filter((item) => item.path && item.path !== '/');
+}
 
 function rowMatchesKeyword(row, keyword) {
   const articleKeywords = parseKeywords(getArticleKeywords(row));
@@ -181,7 +195,11 @@ function renderBentoGrid(block, articles, emptyMessage) {
    ----------------------------------------------------------------------- */
 
 async function fetchArticles(block, config) {
-  const authoredLinks = getAuthoredLinks(block);
+  const mode = String(config.mode || 'dynamic').trim().toLowerCase();
+
+  const authoredLinks = mode === 'links'
+    ? getLinksFromBlock(block)
+    : getAuthoredLinks(block);
   if (authoredLinks.length > 0) {
     let indexRows = [];
     try {
